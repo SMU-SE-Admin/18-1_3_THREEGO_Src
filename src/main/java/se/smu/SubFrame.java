@@ -5,12 +5,9 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
-import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import se.smu.memo.Memo;
 import se.smu.todolist.TodoEnroll;
 import se.smu.todolist.TodoModify;
 
@@ -145,7 +143,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 	public Object getCellEditorValue() {
 		// TODO Auto-generated method stub
 		
-		return null;
+		return btn.getText();
 	}
 
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -156,7 +154,13 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// TODO Auto-generated method stub
-		String type = value.toString();
+		String type = "";
+		if(value instanceof Object[]) {
+			Object[] val = (Object[])value;
+			type = val[0].toString();
+		}else if(value instanceof String) {
+			type = value.toString();
+		}
 		if ("변경".equals(type)) {
 			Vector<Object> rowData = new Vector<Object>();
 			rowData = getRows(table, row);
@@ -165,7 +169,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 			DefaultTableModel tm = (DefaultTableModel) table.getModel();
 			tm.removeRow(row);
 		}else if("메모".equals(type)) {
-			System.out.println("메모");
+			Frame fr = new Memo(table, row, column);
 		}else if("중요도".equals(type)) {
 			Color[] colors = {Color.LIGHT_GRAY, Color.YELLOW, Color.RED};
 			for(int i=0; i<colors.length; i++) {
@@ -175,7 +179,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 				}
 			}
 		}
-		return null;
+		return btn;
 	}
 
 	private Vector<Object> getRows(JTable tbl, int row) {

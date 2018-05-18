@@ -14,15 +14,17 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextArea;
 
 public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 
 	private JPanel contentPane;
 	private JTextField tfSubject;
-	private JTextField tfWTD;
+	private JTextArea taWTD;
 	private JButton btnComplete;
 
 	private JComboBox cbDeadMonth;
@@ -98,10 +100,6 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		cbRDeadDate.setBounds(328, 198, 57, 21);
 		getContentPane().add(cbRDeadDate);
 
-		tfWTD = new JTextField();
-		tfWTD.setColumns(10);
-		tfWTD.setBounds(162, 283, 324, 90);
-		getContentPane().add(tfWTD);
 
 		JLabel lblWave = new JLabel("~");
 		lblWave.setBounds(289, 159, 27, 15);
@@ -119,6 +117,11 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		cbState.setModel(new DefaultComboBoxModel(new String[] { "신규", "진행", "해결" }));
 		cbState.setBounds(259, 239, 57, 21);
 		getContentPane().add(cbState);
+		
+		taWTD = new JTextArea();
+		JScrollPane spWTD = new JScrollPane(taWTD);
+		spWTD.setBounds(162, 283, 324, 90);
+		getContentPane().add(spWTD);
 
 		setVisible(true);
 	}
@@ -173,7 +176,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnComplete) {
-			if (!tfSubject.getText().equals("") && !tfWTD.getText().equals("")) {
+			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
 				todoData[0] = "중요도";
 				todoData[1] = tfSubject.getText();
 				todoData[2] = cbDeadMonth.getSelectedItem().toString()  + 
@@ -181,10 +184,10 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 				todoData[3] = cbRDeadMonth.getSelectedItem().toString() +
 						"." + cbRDeadDate.getSelectedItem().toString().toString();
 				todoData[4] = cbState.getSelectedItem();
-				todoData[5] = tfWTD.getText();
+				todoData[5] = taWTD.getText();
 				todoData[6] = "변경";
 				todoData[7] = "삭제";
-				todoData[8] = "메모";
+				todoData[8] = new Object[]{"메모", ""};
 				todoModel.addRow(todoData);
 				setVisible(false);
 			} else {

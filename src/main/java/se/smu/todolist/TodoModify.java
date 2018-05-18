@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +21,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
 	private JPanel contentPane;
 	private JTextField tfSubject;
-	private JTextField tfWTD;
+	private JTextArea taWTD;
 	private JButton btnComplete;
 
 	private JComboBox cbDeadMonth;
@@ -99,10 +100,9 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		cbRDeadDate.setBounds(328, 198, 57, 21);
 		getContentPane().add(cbRDeadDate);
 
-		tfWTD = new JTextField();
-		tfWTD.setColumns(10);
-		tfWTD.setBounds(162, 283, 324, 90);
-		getContentPane().add(tfWTD);
+		taWTD = new JTextArea();
+		taWTD.setBounds(162, 283, 324, 90);
+		getContentPane().add(taWTD);
 
 		JLabel lblWave = new JLabel("~");
 		lblWave.setBounds(289, 159, 27, 15);
@@ -176,8 +176,9 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnComplete) {
-			if (!tfSubject.getText().equals("") && !tfWTD.getText().equals("")) {
+			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
 				Vector<Object> modi = new Vector<Object>();
+				Object[] memo = (Object[]) todoData.get(8);
 				modi.add(0, todoData.get(0));
 				modi.add(1, tfSubject.getText());
 				modi.add(2, cbDeadMonth.getSelectedItem().toString()  + 
@@ -185,10 +186,10 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 				modi.add(3, cbRDeadMonth.getSelectedItem().toString() +
 						"." + cbRDeadDate.getSelectedItem().toString().toString());
 				modi.add(4, cbState.getSelectedItem());
-				modi.add(5, tfWTD.getText());
+				modi.add(5, taWTD.getText());
 				modi.add(6, "변경");
 				modi.add(7, "삭제");
-				modi.add(8, "메모");
+				modi.add(8, new Object[] {"메모", memo[1].toString()});
 				todoModel.insertRow(row, modi);
 				todoModel.removeRow(row+1);
 				setVisible(false);
@@ -209,7 +210,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		cbRDeadMonth.setSelectedItem(rdeadLine[0]);
 		cbRDeadDate.setSelectedItem(rdeadLine[1]);
 		cbState.setSelectedItem(data.get(4).toString());
-		tfWTD.setText(data.get(5).toString());
+		taWTD.setText(data.get(5).toString());
 	}
 
 }

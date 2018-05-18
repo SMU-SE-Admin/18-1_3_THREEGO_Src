@@ -7,6 +7,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -37,9 +38,9 @@ public class enrollModifyWindow extends JFrame {
 	JComboBox start_comboBox;
 	JComboBox end_comboBox;
 	ButtonGroup grouprb;
-	Object input_data[] = new Object[7];
+	private int row;
 	
-	public enrollModifyWindow(final DefaultTableModel subtableModel, final Object input_data[]) {
+	public enrollModifyWindow(final DefaultTableModel subtableModel, final Object input_data[], final int row) {
 		setLocation(300, 300);
 		setSize(520,400);
 		getContentPane().setLayout(null);
@@ -87,16 +88,24 @@ public class enrollModifyWindow extends JFrame {
 		text_Profname = new JTextField();
 		text_Profname.setColumns(10);
 		text_Profname.setBounds(145, 252, 214, 26);
-		text_Profname.setText((String)input_data[5]);
+		text_Profname.setText((String)input_data[4]);
 		getContentPane().add(text_Profname);
 		
-		rb1 = new JRadioButton("월", true);
-		rb2 = new JRadioButton("화");
-		rb3 = new JRadioButton("수");
-		rb4 = new JRadioButton("목");
-		rb5 = new JRadioButton("금");
-		rb6 = new JRadioButton("토");
-		rb7 = new JRadioButton("일");
+		String today[] = {"월", "화", "수", "목", "금", "토", "일"};
+		boolean tb[] = {false, false, false, false, false, false, false};
+		
+		for(int i = 0; i < today.length; i++) {
+			if(input_data[2] == today[i]) {
+				tb[i] = true;
+			}
+		}
+		rb1 = new JRadioButton(today[0], tb[0]);
+		rb2 = new JRadioButton(today[1], tb[1]);
+		rb3 = new JRadioButton(today[2], tb[2]);
+		rb4 = new JRadioButton(today[3], tb[3]);
+		rb5 = new JRadioButton(today[4], tb[4]);
+		rb6 = new JRadioButton(today[5], tb[5]);
+		rb7 = new JRadioButton(today[6], tb[6]);
 		
 		grouprb = new ButtonGroup();
 		
@@ -123,21 +132,24 @@ public class enrollModifyWindow extends JFrame {
 		getContentPane().add(rb6);
 		getContentPane().add(rb7);
 		
+		String sc = input_data[3].toString().split(" ~ ")[0];
+		String ec = input_data[3].toString().split(" ~ ")[1];
+		
 		start_comboBox = new JComboBox(starthour);
+		start_comboBox.setSelectedItem(sc);
 		start_comboBox.setBounds(156, 214, 67, 24);
 		getContentPane().add(start_comboBox);
 		
 		end_comboBox = new JComboBox(endhour);
+		end_comboBox.setSelectedItem(ec);
 		end_comboBox.setBounds(289, 214, 65, 24);
 		getContentPane().add(end_comboBox);
 		
 		JLabel lblNewLabel_2 = new JLabel("   ~");
 		lblNewLabel_2.setBounds(239, 217, 36, 18);
 		getContentPane().add(lblNewLabel_2);
-
-		//completeButton.addActionListener(this); 
 		
-		//final int row = subtableModel.getColumnCount()
+		this.row = row;
 
 		completeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -150,8 +162,8 @@ public class enrollModifyWindow extends JFrame {
 					input_data[4] = text_Profname.getText();
 					input_data[5] = "변경";
 					input_data[6] = "삭제";
-					subtableModel.addRow(input_data);
-					//subtableModel.removeRow(row);
+					subtableModel.insertRow(row, input_data);
+					subtableModel.removeRow(row + 1);
 					setVisible(false);
 				}
 				else {
@@ -174,8 +186,4 @@ public class enrollModifyWindow extends JFrame {
 		return contents;
 	}
 	
-	/*public static void main(String[] args) {
-		
-	}*/
-
 }

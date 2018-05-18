@@ -160,7 +160,7 @@ public class enrollWindow extends JFrame {
 		    AbstractButton ab = enums.nextElement();    
 		    JRadioButton jb = (JRadioButton)ab;          
 		    if(jb.isSelected())                         
-		        contents = jb.getText(); 
+		        contents = jb.getText();
 		}
 		return contents;
 	}

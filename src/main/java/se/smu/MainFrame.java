@@ -50,7 +50,7 @@ public class MainFrame extends JFrame {
 	private DefaultTableModel todoModel = new DefaultTableModel(columns, 0);*/
 
 	public MainFrame(String id) {
-		setTitle("메인화면");
+		
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocation(300, 300);

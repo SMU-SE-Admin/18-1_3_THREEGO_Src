@@ -38,12 +38,12 @@ public class enrollWindow extends JFrame {
 	JComboBox end_comboBox;
 	ButtonGroup grouprb;
 	
-	public enrollWindow(final DefaultTableModel subtableModel, final Object input_data[]) {
+	public enrollWindow(final DefaultTableModel subtableModel, final Object input_data[], final String id) {
 		setLocation(300, 300);
 		setSize(520,400);
 		getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("ID : 201411205");
+		JLabel lblNewLabel = new JLabel("ID : " + id);
 		lblNewLabel.setBounds(28, 16, 117, 18);
 		getContentPane().add(lblNewLabel);
 		
@@ -131,15 +131,10 @@ public class enrollWindow extends JFrame {
 		lblNewLabel_2.setBounds(239, 217, 36, 18);
 		getContentPane().add(lblNewLabel_2);
 
-		//completeButton.addActionListener(this);
-
 		completeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Command Success");
 				if(!text_Sem.getText().equals("") && !text_Subname.getText().equals("") && !text_Profname.getText().equals("")) {
-					/*System.out.println(text_Sem.getText());
-					System.out.println(selectedRadioContents(grouprb));
-					System.out.println(start_comboBox.getSelectedItem());*/
 					input_data[0] = text_Sem.getText();
 					input_data[1] = text_Subname.getText();
 					input_data[2] = selectedRadioContents(grouprb);
@@ -169,10 +164,5 @@ public class enrollWindow extends JFrame {
 		}
 		return contents;
 	}
-	
-
-	/*public static void main(String[] args) {
-		new enrollWindow();
-	}*/
 	
 }

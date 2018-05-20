@@ -99,6 +99,16 @@ public class DBConnection {
 		return result;
 	}
 	
+	public boolean deleteTodo(String id, Vector<Object> row) {
+		boolean result = false;
+		String sql = "delete from todo_tbl where id='" + id + "' and importance=" + row.get(0) + " and name='" 
+				+ row.get(1) +"' and deadline='" + row.get(2) + "' and rdeadline='" + row.get(3) 
+				+ "' and state='" + row.get(4) + "' and wtd='" + row.get(5) + "' and memo='" + row.get(6) + "'";
+		updateSQL(sql);
+		result = true;
+		return result;
+	}
+	
 	
 	
 	private ResultSet selectSQL(String sql) {

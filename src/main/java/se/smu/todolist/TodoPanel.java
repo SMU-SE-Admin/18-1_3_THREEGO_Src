@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import se.smu.alarm.Alarm;
 import se.smu.db.DBConnection;
 import se.smu.memo.Memo;
 
@@ -57,6 +58,7 @@ public class TodoPanel extends JPanel implements ActionListener {
 		columns = initColumn();
 		todoModel = new DefaultTableModel(columns, 0);
 		
+		Alarm alarm = new Alarm(id);
 		
 		refreshTable(id);
 		
@@ -179,11 +181,14 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 					rowData = getRows(table, row);
 					Frame fr = new TodoModify(id, (DefaultTableModel) table.getModel(), rowData, row);
 				}else if("삭제".equals(type)) {
-					DBConnection db = new DBConnection();
-					db.deleteTodo(id, getRows(table, row));
-					db.close();
-					DefaultTableModel tm = (DefaultTableModel) table.getModel();
-					tm.removeRow(row);
+					if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 
+							JOptionPane.YES_NO_OPTION , JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+						DBConnection db = new DBConnection();
+						db.deleteTodo(id, getRows(table, row));
+						db.close();
+						DefaultTableModel tm = (DefaultTableModel) table.getModel();
+						tm.removeRow(row);
+					}
 				}else if("메모".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
 					rowData = getRows(table, row);

@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
 		subPanel = new SubPanel(id);
 		this.add(subPanel);
 		
-		todoPanel = new TodoPanel();
+		todoPanel = new TodoPanel(id);
 		this.add(todoPanel);
 
 		/*subtableModel = new DefaultTableModel(subTitle, 0);

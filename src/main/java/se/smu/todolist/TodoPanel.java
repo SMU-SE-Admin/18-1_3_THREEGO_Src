@@ -20,6 +20,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
+
+import se.smu.db.DBConnection;
+
 import javax.swing.JScrollBar;
 import java.awt.Scrollbar;
 
@@ -37,16 +40,16 @@ public class TodoPanel extends JPanel implements ActionListener {
 		JLabel lblTitle = new JLabel("To Do List");
 		lblTitle.setBounds(514, 17, 121, 18);
 		add(lblTitle);
-
+		
 		tblTodo = new JTable(todoModel);
-		tblTodo.getColumnModel().getColumn(0).setCellEditor(new TodoTableCell("중요도"));
-		tblTodo.getColumnModel().getColumn(0).setCellRenderer(new TodoTableCell("중요도"));
-		tblTodo.getColumnModel().getColumn(6).setCellEditor(new TodoTableCell("변경"));
-		tblTodo.getColumnModel().getColumn(6).setCellRenderer(new TodoTableCell("변경"));
-		tblTodo.getColumnModel().getColumn(7).setCellEditor(new TodoTableCell("삭제"));
-		tblTodo.getColumnModel().getColumn(7).setCellRenderer(new TodoTableCell("삭제"));
-		tblTodo.getColumnModel().getColumn(8).setCellEditor(new TodoTableCell("메모"));
-		tblTodo.getColumnModel().getColumn(8).setCellRenderer(new TodoTableCell("메모"));
+		tblTodo.getColumnModel().getColumn(0).setCellEditor(new TodoTableCell("중요도", tblTodo));
+		tblTodo.getColumnModel().getColumn(0).setCellRenderer(new TodoTableCell("중요도", tblTodo));
+		tblTodo.getColumnModel().getColumn(6).setCellEditor(new TodoTableCell("변경", tblTodo));
+		tblTodo.getColumnModel().getColumn(6).setCellRenderer(new TodoTableCell("변경", tblTodo));
+		tblTodo.getColumnModel().getColumn(7).setCellEditor(new TodoTableCell("삭제", tblTodo));
+		tblTodo.getColumnModel().getColumn(7).setCellRenderer(new TodoTableCell("삭제", tblTodo));
+		tblTodo.getColumnModel().getColumn(8).setCellEditor(new TodoTableCell("메모", tblTodo));
+		tblTodo.getColumnModel().getColumn(8).setCellRenderer(new TodoTableCell("메모", tblTodo));
 		JScrollPane sp = new JScrollPane(tblTodo);
 		sp.setBounds(502, 47, 750, 350);
 		add(sp);
@@ -55,7 +58,6 @@ public class TodoPanel extends JPanel implements ActionListener {
 		btnEnroll.setBounds(1170, 8, 71, 33);
 		btnEnroll.addActionListener(this);
 		add(btnEnroll);
-		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -70,17 +72,46 @@ public class TodoPanel extends JPanel implements ActionListener {
 class TodoTableCell extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
 	private JButton btn;
 
-	public TodoTableCell(final String label) {
+	public TodoTableCell(final String label, final JTable table) {
 		btn = new JButton(label);
+		btn.setToolTipText(label);
 		if("중요도".equals(label)) {
-			btn = new JButton();
+			btn.setText("");
 			btn.setBackground(Color.LIGHT_GRAY);
 		}
+		
+		btn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String type = btn.getToolTipText();
+				int row = table.getSelectedRow();
+				
+				if ("변경".equals(type)) {
+					Vector<Object> rowData = new Vector<Object>();
+					rowData = getRows(table, row);
+					Frame fr = new TodoModify((DefaultTableModel) table.getModel(), rowData, row);
+				}else if("삭제".equals(type)) {
+					DefaultTableModel tm = (DefaultTableModel) table.getModel();
+					tm.removeRow(row);
+				}else if("메모".equals(type)) {
+					System.out.println("메모");
+				}else if("중요도".equals(type)) {
+					Color[] colors = {Color.LIGHT_GRAY, Color.YELLOW, Color.RED};
+					for(int i=0; i<colors.length; i++) {
+						if(btn.getBackground().equals(colors[i])) {
+							btn.setBackground(colors[(i+1)%3]);
+							break;
+						}
+					}
+				}
+				
+			}
+		});
 	}
 
 	public Object getCellEditorValue() {
 		// TODO Auto-generated method stub
-		
 		return null;
 	}
 
@@ -92,26 +123,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// TODO Auto-generated method stub
-		String type = value.toString();
-		if ("변경".equals(type)) {
-			Vector<Object> rowData = new Vector<Object>();
-			rowData = getRows(table, row);
-			Frame fr = new TodoModify((DefaultTableModel) table.getModel(), rowData, row);
-		}else if("삭제".equals(type)) {
-			DefaultTableModel tm = (DefaultTableModel) table.getModel();
-			tm.removeRow(row);
-		}else if("메모".equals(type)) {
-			System.out.println("메모");
-		}else if("중요도".equals(type)) {
-			Color[] colors = {Color.LIGHT_GRAY, Color.YELLOW, Color.RED};
-			for(int i=0; i<colors.length; i++) {
-				if(btn.getBackground().equals(colors[i])) {
-					btn.setBackground(colors[(i+1)%3]);
-					break;
-				}
-			}
-		}
-		return null;
+		return btn;
 	}
 
 	private Vector<Object> getRows(JTable tbl, int row) {

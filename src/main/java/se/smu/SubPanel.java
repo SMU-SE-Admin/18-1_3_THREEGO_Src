@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
+import se.smu.db.DBConnection;
 import se.smu.todolist.TodoEnroll;
 
 public class SubPanel extends JPanel implements ActionListener{
@@ -37,6 +39,8 @@ public class SubPanel extends JPanel implements ActionListener{
 		setSize(500, 400);
 		subtableModel = new DefaultTableModel(subTitle, 0);
 		table = new JTable(subtableModel);
+		
+		refreshTable(id, subtableModel, subTitle);
 
 		sp = new JScrollPane(table);
 		sp.setBounds(0, 47, 500, 350);
@@ -76,6 +80,18 @@ public class SubPanel extends JPanel implements ActionListener{
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(subtableModel);
 		table.setRowSorter(sorter);
 	}
+	
+	private void refreshTable(String id, DefaultTableModel tm, Object[] headers) {
+		Vector<Object> columns = new Vector<Object>();
+		for(int i=0; i<headers.length; i++) {
+			columns.add(headers[i]);
+		}
+		DBConnection db = new DBConnection();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		data = db.getSubject(id);
+		tm.setDataVector(data, columns);
+		db.close();
+	}
 }
 
 class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
@@ -109,6 +125,8 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 		}else if("삭제".equals(type)) {
 			if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 
 					JOptionPane.YES_NO_OPTION , JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+				DBConnection db = new DBConnection();
+				db.deleteSubject(id, getRows(table, row));
 				DefaultTableModel tm = (DefaultTableModel) table.getModel();
 				tm.removeRow(row);
 			}

@@ -9,6 +9,7 @@ public class TodoInfo implements Serializable {
 	private Object cbRDeadMonth;
 	private Object cbState;
 	private Object tfWTD;
+	private Object memo;
 
 	public Object getImportance() {
 		return importance;
@@ -57,13 +58,23 @@ public class TodoInfo implements Serializable {
 	public void setTfWTD(Object tfWTD) {
 		this.tfWTD = tfWTD;
 	}
+	
+	public Object getMemo() {
+		return memo;
+	}
+	
+	public void setMemo(Object memo) {
+		this.memo = memo;
+	}
 
-	TodoInfo(Object importance, Object tfSubject, Object cbDeadMonth, Object cbRDeadMonth, Object cbState, Object tfWTD) {
+	TodoInfo(Object importance, Object tfSubject, Object cbDeadMonth, Object cbRDeadMonth, Object cbState, Object tfWTD, Object memo) {
 		this.importance = importance;
 		this.tfSubject = tfSubject;
 		this.cbDeadMonth = cbDeadMonth;
 		this.cbRDeadMonth = cbRDeadMonth;
 		this.cbState = cbState;
 		this.tfWTD = tfWTD;
+		this.memo = memo;
 	}
+
 }

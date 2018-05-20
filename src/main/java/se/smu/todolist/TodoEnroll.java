@@ -190,20 +190,21 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnComplete) {
 			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
-				todoData.add(cbImportance.getSelectedIndex());
-				todoData.add(tfSubject.getText());
-				todoData.add(cbDeadMonth.getSelectedItem().toString()  + 
+				Vector<Object> data = new Vector<Object>(todoData);
+				data.add(cbImportance.getSelectedIndex());
+				data.add(tfSubject.getText());
+				data.add(cbDeadMonth.getSelectedItem().toString()  + 
 						"." + cbDeadDate.getSelectedItem().toString());
-				todoData.add(cbRDeadMonth.getSelectedItem().toString() +
+				data.add(cbRDeadMonth.getSelectedItem().toString() +
 						"." + cbRDeadDate.getSelectedItem().toString().toString());
-				todoData.add(cbState.getSelectedItem());
-				todoData.add(taWTD.getText());
-				todoData.add("");
+				data.add(cbState.getSelectedItem());
+				data.add(taWTD.getText());
+				data.add("");
 				
-				if(!checkDupl(todoModel, todoData)) {
-					todoModel.addRow(todoData);
+				if(!checkDupl(todoModel, data)) {
+					todoModel.addRow(data);
 					DBConnection con = new DBConnection();
-					con.setTodo(id, todoData);
+					con.setTodo(id, data);
 					con.close();
 				}
 				else {

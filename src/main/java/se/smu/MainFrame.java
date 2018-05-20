@@ -40,7 +40,6 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocation(300, 300);
 		setSize(1280, 450);
-		id = "admin";
 		this.id = id;
 		subPanel = new SubPanel(id);
 		this.add(subPanel);
@@ -53,6 +52,5 @@ public class MainFrame extends JFrame {
 
 	public static void main(String[] args) {
 		new MainFrame(id);
-		System.out.println(id);
 	}
 }

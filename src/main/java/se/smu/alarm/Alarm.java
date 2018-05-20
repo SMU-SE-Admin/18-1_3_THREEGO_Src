@@ -17,7 +17,6 @@ public class Alarm {
 		int alarmMonth = cal.get(Calendar.MONTH)+1;
 		int alarmDay = cal.get(Calendar.DAY_OF_MONTH);
 		
-		System.out.println(alarmMonth + ", " + alarmDay);
 		Vector deadlines = sortData(id);
 		
 		for(int i=0; i<deadlines.size(); i++) {

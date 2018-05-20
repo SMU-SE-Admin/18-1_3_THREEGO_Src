@@ -213,7 +213,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 					todoModel.insertRow(row, modi);
 					todoModel.removeRow(row+1);
 				}else {
-					System.out.println("데이터 중복!");
+					JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				setVisible(false);

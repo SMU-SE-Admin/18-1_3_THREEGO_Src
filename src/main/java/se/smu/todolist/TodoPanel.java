@@ -49,11 +49,7 @@ public class TodoPanel extends JPanel implements ActionListener {
 		JLabel lblTitle = new JLabel("To Do List");
 		lblTitle.setBounds(514, 17, 121, 18);
 		add(lblTitle);
-		id = "admin";
-		DBConnection db = new DBConnection();
-		Vector<Object> obj = db.getLogIn("admin", "1111");
-		System.out.println(obj.get(0));
-		db.close();
+		this.id = _id;
 
 		columns = initColumn();
 		todoModel = new DefaultTableModel(columns, 0);

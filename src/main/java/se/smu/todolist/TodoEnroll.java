@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -208,7 +209,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 					con.close();
 				}
 				else {
-					System.out.println("데이터 중복!");
+					JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				setVisible(false);
 			} else {

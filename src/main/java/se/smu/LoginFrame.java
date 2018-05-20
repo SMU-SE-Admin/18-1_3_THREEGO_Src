@@ -15,6 +15,9 @@ import java.awt.Font;
 import java.awt.Frame;
 
 import javax.swing.JTextField;
+
+import se.smu.db.DBConnection;
+
 import javax.swing.JButton;
 
 public class LoginFrame extends JFrame implements ActionListener {
@@ -81,13 +84,23 @@ public class LoginFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == LoginButton) {
 			if(textField.getText().equals("") || passwordField.getText().equals("")) {
-				JOptionPane.showMessageDialog(null, "ID 혹은 P/W를 확인해주세요", "ERROR!!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "ID 혹은 P/W를 입력해주세요", "ERROR!!", JOptionPane.ERROR_MESSAGE);
 				return;
+			}else {
+				String id = textField.getText();
+				String pwd = String.valueOf(passwordField.getPassword());
+				
+				DBConnection db = new DBConnection();
+					if(db.LogIn(id, pwd)) {
+						id = textField.getText();
+						Frame fs = new MainFrame(id);
+						fs.setVisible(true);
+						this.setVisible(false);
+					}else {
+						JOptionPane.showMessageDialog(null, "ID 혹은 P/W를 확인해주세요", "ERROR!!", JOptionPane.ERROR_MESSAGE);
+					}
+				db.close();
 			}
-			id = textField.getText();
-			Frame fs = new MainFrame(id);
-			fs.setVisible(true);
-			this.setVisible(false);
 		}
 	}
 }

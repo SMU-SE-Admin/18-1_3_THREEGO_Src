@@ -55,11 +55,13 @@ public class TodoPanel extends JPanel implements ActionListener {
 		db.close();
 
 		columns = initColumn();
-		todoModel = new DefaultTableModel(columns, 0); 
+		todoModel = new DefaultTableModel(columns, 0);
+		
 		
 		refreshTable(id);
 		
 		tblTodo = new JTable(todoModel);
+		TodoSorting ts = new TodoSorting(tblTodo, todoModel);
 		tblTodo.getColumnModel().getColumn(0).setCellEditor(new TodoTableCell(id, "중요도", tblTodo));
 		tblTodo.getColumnModel().getColumn(0).setCellRenderer(new TodoTableCell(id, "중요도", tblTodo));
 		tblTodo.getColumnModel().getColumn(6).setCellEditor(new TodoTableCell(id, "변경", tblTodo));

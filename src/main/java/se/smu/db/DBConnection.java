@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,44 +30,78 @@ public class DBConnection {
 		} 
 	}
 	
-	public Object[] getLogIn(String _id, String _pwd) {
+	public Vector<Object> getLogIn(String _id, String _pwd) {
 		String id = "";
 		String pwd = "";
-		Object[] result = new Object[2];
-		String sql = "select * from user_tbl where id = \'" + _id + "\' and pwd = \'" + _pwd + "\'";
-		rs = makeSQL(sql);
+		Vector<Object> result = new Vector<Object>();
+		String sql = "select * from user_tbl where id = '" + _id + "' and pwd = '" + _pwd + "'";
+		rs = selectSQL(sql);
 		try {
 		if(rs.next()) {
 			id = rs.getString("id");
 			pwd = rs.getString("pwd");
-			result[0] = id;
-			result[1] = pwd;
-			lgr.log(Level.FINE, "Success Log In");
+			result.add(id);
+			result.add(pwd);
 		}
 		}catch(Exception e) {
 			lgr.log(Level.SEVERE, e.getMessage(), e);
 		}finally {
 			closeRSST();
 		}
+		lgr.log(Level.INFO, "Success Log In");
 		return result;
 	}
 	
-	public boolean setTodo(Object[] row) {
+	public boolean setTodo(String id, Vector<Object> row) {
 		boolean result = false;
-		String sql = "insert into todo_tbl values (" + row[0] + ", \'" + row[1] + "\', \'"
-				+ row[2] + "\', \'" + row[3] + "\', \'" + row[4] + "\', \'" 
-				+ row[5] + "\')";
+		String sql = "insert into todo_tbl values ('" + id + "', " + row.get(0) + ", '" + row.get(1) + "', '"
+				+ row.get(2) + "', '" + row.get(3) + "', '" + row.get(4) + "', '" 
+				+ row.get(5) + "', '" + row.get(6) + "')";
 		
-		rs = makeSQL(sql);
-		lgr.log(Level.FINE, "Success Insert todo");
+		updateSQL(sql);
+		lgr.log(Level.INFO, "Success Insert Todo Data");
 		result = true;
-		
+		return result;
+	}
+	
+	public Vector<Vector<Object>> getTodo(String id) {
+		Vector<Vector<Object>> result = new Vector<Vector<Object>>();
+		String sql = "select * from todo_tbl where id = '" + id + "'";
+		rs = selectSQL(sql);
+		try {
+			while(rs.next()) {
+				Vector<Object> row = new Vector<Object>();
+				row.add(rs.getInt("importance"));
+				row.add(rs.getString("name"));
+				row.add(rs.getString("deadline"));
+				row.add(rs.getString("rdeadline"));
+				row.add(rs.getString("state"));
+				row.add(rs.getString("wtd"));
+				row.add(rs.getString("memo"));
+				result.add(row);
+			}
+		}catch(SQLException e) {
+			lgr.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return result;
+	}
+	
+	public boolean updateTodo(String id, Vector<Object> prev, Vector<Object> after) {
+		boolean result = false;
+		String sql = "update todo_tbl set importance=" + after.get(0) + ", name='" + after.get(1) +"', deadline='"
+				+ after.get(2) + "', rdeadline='" + after.get(3) + "', state='" + after.get(4) + "', wtd='"
+				+ after.get(5) + "', memo='" + after.get(6) + "' where id='" + id + "' and " 
+				+ "importance=" + prev.get(0) + " and name='" + prev.get(1) +"' and deadline='"
+						+ prev.get(2) + "' and rdeadline='" + prev.get(3) + "' and state='" + prev.get(4) + "' and wtd='"
+						+ prev.get(5) + "' and memo='" + prev.get(6) + "'";
+		updateSQL(sql);
+		result = true;
 		return result;
 	}
 	
 	
 	
-	private ResultSet makeSQL(String sql) {
+	private ResultSet selectSQL(String sql) {
 		st = null;
 		rs = null;
 		try {
@@ -76,6 +111,16 @@ public class DBConnection {
 			lgr.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return rs; 		
+	}
+	
+	private void updateSQL(String sql) {
+		st = null;
+		try {
+			st = conn.createStatement();
+			st.executeUpdate(sql);
+		}catch(SQLException e) {
+			lgr.log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 	
 	private void closeRSST() {

@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -40,12 +41,12 @@ public class enrollModifyWindow extends JFrame {
 	ButtonGroup grouprb;
 	private int row;
 	
-	public enrollModifyWindow(final DefaultTableModel subtableModel, final Object input_data[], final int row) {
+	public enrollModifyWindow(final DefaultTableModel subtableModel, final Object input_data[], final int row, String id) {
 		setLocation(300, 300);
 		setSize(520,400);
 		getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("ID : 201411205");
+		JLabel lblNewLabel = new JLabel("ID : " + id);
 		lblNewLabel.setBounds(28, 16, 117, 18);
 		getContentPane().add(lblNewLabel);
 		
@@ -167,7 +168,7 @@ public class enrollModifyWindow extends JFrame {
 					setVisible(false);
 				}
 				else {
-					System.out.println("누락된곳 있음");
+					JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}

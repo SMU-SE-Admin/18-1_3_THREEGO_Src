@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -195,7 +196,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 				setVisible(false);
 			}
 			else {
-				System.out.println("누락");
+				JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

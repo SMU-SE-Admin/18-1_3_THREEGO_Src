@@ -3,6 +3,7 @@ package se.smu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -15,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import se.smu.db.DBConnection;
 
 public class enrollWindow extends JFrame {
 	JTextField text_Sem;
@@ -134,7 +137,6 @@ public class enrollWindow extends JFrame {
 
 		completeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Command Success");
 				if(!text_Sem.getText().equals("") && !text_Subname.getText().equals("") && !text_Profname.getText().equals("")) {
 					input_data[0] = text_Sem.getText();
 					input_data[1] = text_Subname.getText();
@@ -143,7 +145,14 @@ public class enrollWindow extends JFrame {
 					input_data[4] = text_Profname.getText();
 					input_data[5] = "변경";
 					input_data[6] = "삭제";
-					subtableModel.addRow(input_data);
+					if(!checkDupl(subtableModel, input_data)) {
+						DBConnection db = new DBConnection();
+						db.setSubject(id, input_data);
+						db.close();
+						subtableModel.addRow(input_data);
+					}else {
+						JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
 					setVisible(false);
 				}
 				else {
@@ -164,6 +173,23 @@ public class enrollWindow extends JFrame {
 		        contents = jb.getText();
 		}
 		return contents;
+	}
+	
+	private boolean checkDupl(DefaultTableModel tm, Object[] row) {
+		Vector data = tm.getDataVector();
+		for(int i=0; i<data.size(); i++) {
+			Vector tmp = (Vector) data.get(i);
+			int count = 0;
+			for(int j=0; j<5; j++) {
+				if(tmp.get(j).equals(row[j])){
+					count++;
+				}
+			}
+			if(count == 5)
+				return true;
+			
+		}
+		return false;
 	}
 	
 }

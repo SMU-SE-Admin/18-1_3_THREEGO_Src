@@ -27,7 +27,7 @@ import javax.swing.JScrollBar;
 import java.awt.Scrollbar;
 
 public class TodoPanel extends JPanel implements ActionListener {
-	public Object todoData[] = new Object[9];
+	public Object todoData[] = new Object[6];
 
 	private JButton btnEnroll;
 	private JTable tblTodo;

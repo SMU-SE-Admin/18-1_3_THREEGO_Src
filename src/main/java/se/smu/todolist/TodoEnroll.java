@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.time.DayOfWeek;
-import java.time.Month;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -13,13 +11,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JTextArea;
+
+import se.smu.db.DBConnection;
 
 public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 
@@ -33,21 +32,25 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 	private JComboBox cbRDeadMonth;
 	private JComboBox cbRDeadDate;
 
-	private Object todoData[];
+	private Vector<Object> todoData;
+	private String id;
+	
 	private DefaultTableModel todoModel;
 	private JLabel lblState;
 	private JComboBox cbState;
+	private JComboBox cbImportance;
 
 	/**
 	 * Create the frame.
 	 */
-	public TodoEnroll(final DefaultTableModel _todoModel, final Object _todoData[]) {
+	public TodoEnroll(String _id, final DefaultTableModel _todoModel, final Vector<Object> _todoData) {
 		setLocation(800, 300);
 		setSize(550, 450);
 		getContentPane().setLayout(null);
 
 		todoModel = _todoModel;
 		todoData = _todoData;
+		id = _id;
 
 		btnComplete = new JButton("완료");
 		btnComplete.setBounds(374, 45, 112, 42);
@@ -67,7 +70,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		getContentPane().add(lblRDeadline);
 
 		JLabel lblWTD = new JLabel("WHAT TO DO");
-		lblWTD.setBounds(57, 286, 83, 15);
+		lblWTD.setBounds(57, 316, 83, 15);
 		getContentPane().add(lblWTD);
 
 		JLabel lblToDoList = new JLabel("TO DO LIST");
@@ -121,8 +124,17 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		
 		taWTD = new JTextArea();
 		JScrollPane spWTD = new JScrollPane(taWTD);
-		spWTD.setBounds(162, 283, 324, 90);
+		spWTD.setBounds(162, 311, 324, 90);
 		getContentPane().add(spWTD);
+		
+		JLabel lblImportance = new JLabel("중요도");
+		lblImportance.setBounds(57, 279, 83, 15);
+		getContentPane().add(lblImportance);
+		
+		cbImportance = new JComboBox();
+		cbImportance.setBounds(259, 276, 57, 21);
+		cbImportance.setModel(new DefaultComboBoxModel(new String[] { "낮음", "보통", "높음" }));
+		getContentPane().add(cbImportance);
 
 		setVisible(true);
 	}
@@ -178,23 +190,46 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnComplete) {
 			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
-				todoData[0] = "중요도";
-				todoData[1] = tfSubject.getText();
-				todoData[2] = cbDeadMonth.getSelectedItem().toString()  + 
-						"." + cbDeadDate.getSelectedItem().toString();
-				todoData[3] = cbRDeadMonth.getSelectedItem().toString() +
-						"." + cbRDeadDate.getSelectedItem().toString().toString();
-				todoData[4] = cbState.getSelectedItem();
-				todoData[5] = taWTD.getText();
-				todoData[6] = "변경";
-				todoData[7] = "삭제";
-				todoData[8] = new Object[]{"메모", ""};
-				todoModel.addRow(todoData);
+				todoData.add(cbImportance.getSelectedIndex());
+				todoData.add(tfSubject.getText());
+				todoData.add(cbDeadMonth.getSelectedItem().toString()  + 
+						"." + cbDeadDate.getSelectedItem().toString());
+				todoData.add(cbRDeadMonth.getSelectedItem().toString() +
+						"." + cbRDeadDate.getSelectedItem().toString().toString());
+				todoData.add(cbState.getSelectedItem());
+				todoData.add(taWTD.getText());
+				todoData.add("");
+				
+				if(!checkDupl(todoModel, todoData)) {
+					todoModel.addRow(todoData);
+					DBConnection con = new DBConnection();
+					con.setTodo(id, todoData);
+					con.close();
+				}
+				else {
+					System.out.println("데이터 중복!");
+				}
 				setVisible(false);
 			} else {
-				JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
 
+	
+	private boolean checkDupl(DefaultTableModel tm, Vector<Object> row) {
+		Vector data = tm.getDataVector();
+		for(int i=0; i<data.size(); i++) {
+			Vector tmp = (Vector) data.get(i);
+			int count = 0;
+			for(int j=0; j<row.size()-1; j++) {
+				if(tmp.get(j).equals(row.get(j))){
+					count++;
+				}
+			}
+			if(count == 6)
+				return true;
+			
+		}
+		return false;
+	}
 }

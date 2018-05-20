@@ -13,10 +13,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import se.smu.db.DBConnection;
 
 public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
@@ -33,14 +36,16 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 	private Vector<Object> todoData;
 	private DefaultTableModel todoModel;
 	private int row;
+	private String id;
 	
 	private JLabel lblState;
 	private JComboBox cbState;
+	private JComboBox cbImportance;
 
 	/**
 	 * Create the frame.
 	 */
-	public TodoModify(final DefaultTableModel _todoModel, final Vector<Object> _todoData, final int _row) {
+	public TodoModify(String _id, final DefaultTableModel _todoModel, final Vector<Object> _todoData, final int _row) {
 		setLocation(800, 300);
 		setSize(550, 450);
 		getContentPane().setLayout(null);
@@ -48,6 +53,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		todoModel = _todoModel;
 		todoData = _todoData;
 		row = _row;
+		id = _id;
 
 		btnComplete = new JButton("완료");
 		btnComplete.setBounds(374, 45, 112, 42);
@@ -67,7 +73,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		getContentPane().add(lblRDeadline);
 
 		JLabel lblWTD = new JLabel("WHAT TO DO");
-		lblWTD.setBounds(57, 286, 83, 15);
+		lblWTD.setBounds(57, 316, 83, 15);
 		getContentPane().add(lblWTD);
 
 		JLabel lblToDoList = new JLabel("TO DO LIST");
@@ -101,10 +107,6 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		cbRDeadDate.setBounds(328, 198, 57, 21);
 		getContentPane().add(cbRDeadDate);
 
-		taWTD = new JTextArea();
-		taWTD.setBounds(162, 283, 324, 90);
-		getContentPane().add(taWTD);
-
 		JLabel lblWave = new JLabel("~");
 		lblWave.setBounds(289, 159, 27, 15);
 		getContentPane().add(lblWave);
@@ -121,6 +123,20 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		cbState.setModel(new DefaultComboBoxModel(new String[] {"신규","진행","해결"}));
 		cbState.setBounds(259, 239, 57, 21);
 		getContentPane().add(cbState);
+		
+		taWTD = new JTextArea();
+		JScrollPane spWTD = new JScrollPane(taWTD);
+		spWTD.setBounds(162, 311, 324, 90);
+		getContentPane().add(spWTD);
+		
+		JLabel lblImportance = new JLabel("중요도");
+		lblImportance.setBounds(57, 279, 83, 15);
+		getContentPane().add(lblImportance);
+		
+		cbImportance = new JComboBox();
+		cbImportance.setBounds(259, 276, 57, 21);
+		cbImportance.setModel(new DefaultComboBoxModel(new String[] {"낮음","보통","높음"}));
+		getContentPane().add(cbImportance);
 
 		
 		loadData(_todoData);
@@ -179,8 +195,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		if (e.getSource() == btnComplete) {
 			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
 				Vector<Object> modi = new Vector<Object>();
-				Object[] memo = (Object[]) todoData.get(8);
-				modi.add(0, todoData.get(0));
+				modi.add(0, cbImportance.getSelectedIndex());
 				modi.add(1, tfSubject.getText());
 				modi.add(2, cbDeadMonth.getSelectedItem().toString()  + 
 						"." + cbDeadDate.getSelectedItem().toString());
@@ -188,11 +203,19 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 						"." + cbRDeadDate.getSelectedItem().toString().toString());
 				modi.add(4, cbState.getSelectedItem());
 				modi.add(5, taWTD.getText());
-				modi.add(6, "변경");
-				modi.add(7, "삭제");
-				modi.add(8, new Object[] {"메모", memo[1].toString()});
-				todoModel.insertRow(row, modi);
-				todoModel.removeRow(row+1);
+				modi.add(6, todoData.get(6));
+				
+				if(!checkDupl(todoModel, modi)) {
+					DBConnection db = new DBConnection();
+					db.updateTodo(id, todoData, modi);
+					db.close();
+					
+					todoModel.insertRow(row, modi);
+					todoModel.removeRow(row+1);
+				}else {
+					System.out.println("데이터 중복!");
+				}
+				
 				setVisible(false);
 			}
 			else {
@@ -211,7 +234,25 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		cbRDeadMonth.setSelectedItem(rdeadLine[0]);
 		cbRDeadDate.setSelectedItem(rdeadLine[1]);
 		cbState.setSelectedItem(data.get(4).toString());
+		cbImportance.setSelectedIndex((Integer)data.get(0));
 		taWTD.setText(data.get(5).toString());
+	}
+	
+	private boolean checkDupl(DefaultTableModel tm, Vector<Object> row) {
+		Vector data = tm.getDataVector();
+		for(int i=0; i<data.size(); i++) {
+			Vector tmp = (Vector) data.get(i);
+			int count = 0;
+			for(int j=0; j<row.size()-1; j++) {
+				if(tmp.get(j).equals(row.get(j))){
+					count++;
+				}
+			}
+			if(count == 6)
+				return true;
+			
+		}
+		return false;
 	}
 
 }

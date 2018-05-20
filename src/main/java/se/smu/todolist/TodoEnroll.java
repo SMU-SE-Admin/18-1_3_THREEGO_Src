@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -191,7 +192,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 				todoModel.addRow(todoData);
 				setVisible(false);
 			} else {
-				System.out.println("누락");
+				JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

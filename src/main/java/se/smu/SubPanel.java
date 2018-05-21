@@ -56,10 +56,10 @@ public class SubPanel extends JPanel implements ActionListener{
 		lblId_1.setBounds(14, 17, 121, 18);
 		add(lblId_1);
 		
-		table.getColumnModel().getColumn(5).setCellEditor(new SubTableCell("변경", id));
-		table.getColumnModel().getColumn(5).setCellRenderer(new SubTableCell("변경", id));
-		table.getColumnModel().getColumn(6).setCellEditor(new SubTableCell("삭제", id));
-		table.getColumnModel().getColumn(6).setCellRenderer(new SubTableCell("삭제", id));
+		table.getColumnModel().getColumn(5).setCellEditor(new SubTableCell("변경", id, table));
+		table.getColumnModel().getColumn(5).setCellRenderer(new SubTableCell("변경", id, table));
+		table.getColumnModel().getColumn(6).setCellEditor(new SubTableCell("삭제", id, table));
+		table.getColumnModel().getColumn(6).setCellRenderer(new SubTableCell("삭제", id, table));
 		
 		this.id = id;
 		
@@ -97,10 +97,40 @@ public class SubPanel extends JPanel implements ActionListener{
 class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
 	private JButton btn;
 	private String id;
+	private JTable tbl;
 	
-	public SubTableCell(final String label, String id) {
+	public SubTableCell(final String label, String _id, final JTable table) {
 		btn = new JButton(label);
-		this.id = id;
+		id = _id;
+		tbl = table;
+		btn.setText(label);
+				
+		btn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				String type = btn.getText();
+				int row = table.getSelectedRow();
+				if ("변경".equals(type)) {
+					Object input_data[] = new Object[7];
+					input_data = getRows(table, row);
+					Frame fr = new enrollModifyWindow((DefaultTableModel) table.getModel(), input_data, row, id);
+					fr.setVisible(true);
+				}else if("삭제".equals(type)) {
+					if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 
+							JOptionPane.YES_NO_OPTION , JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+						DBConnection db = new DBConnection();
+						if(db.deleteSubject(id, getRows(table, row))) {
+							db.close();
+							int tmRow = table.convertRowIndexToModel(row);
+							DefaultTableModel tm = (DefaultTableModel) table.getModel();
+							tm.removeRow(tmRow);
+						}
+					}
+				}
+			}
+		});
+		
+		
 	}
 
 	public Object getCellEditorValue() {
@@ -115,26 +145,7 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 	}
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		// TODO Auto-generated method stub
-		String type = value.toString();
-		if ("변경".equals(type)) {
-			Object input_data[] = new Object[7];
-			input_data = getRows(table, row);
-			Frame fr = new enrollModifyWindow((DefaultTableModel) table.getModel(), input_data, row, id);
-			fr.setVisible(true);
-		}else if("삭제".equals(type)) {
-			if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 
-					JOptionPane.YES_NO_OPTION , JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
-				DBConnection db = new DBConnection();
-				if(db.deleteSubject(id, getRows(table, row))) {
-					db.close();
-					int tmRow = table.convertRowIndexToModel(row);
-					DefaultTableModel tm = (DefaultTableModel) table.getModel();
-					tm.removeRow(tmRow);
-				}
-			}
-		}
-		return null;
+		return btn;
 	}
 	
 	private Object[] getRows(JTable tbl, int row) {

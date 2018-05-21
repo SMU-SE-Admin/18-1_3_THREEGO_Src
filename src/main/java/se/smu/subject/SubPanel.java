@@ -63,8 +63,6 @@ public class SubPanel extends JPanel implements ActionListener{
 		
 		this.id = id;
 		
-		sort();
-		
 		this.setVisible(true);
 		
 	}
@@ -74,11 +72,6 @@ public class SubPanel extends JPanel implements ActionListener{
 			Frame fs = new enrollWindow(subtableModel, input_data, id);
 			fs.setVisible(true);
 		} 
-	}
-	
-	private void sort() {
-		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(subtableModel);
-		table.setRowSorter(sorter);
 	}
 	
 	private void refreshTable(String id, DefaultTableModel tm, Object[] headers) {

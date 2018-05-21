@@ -99,7 +99,7 @@ public class enrollModifyWindow extends JFrame {
 		boolean tb[] = {false, false, false, false, false, false, false};
 		
 		for(int i = 0; i < today.length; i++) {
-			if(input_data[2] == today[i]) {
+			if(input_data[2].equals(today[i])) {
 				tb[i] = true;
 			}
 		}

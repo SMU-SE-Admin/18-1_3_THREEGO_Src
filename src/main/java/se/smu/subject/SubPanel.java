@@ -1,7 +1,6 @@
 package se.smu.subject;
 
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +8,6 @@ import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -18,7 +16,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableRowSorter;
 
 import se.smu.db.DBConnection;
 import se.smu.todolist.TodoEnroll;
@@ -29,7 +26,6 @@ public class SubPanel extends JPanel implements ActionListener{
 	private JTable table;
 	private JLabel lblId;
 	private JScrollPane sp;
-	private JPanel panel;
 	private JButton enrollButton;
 	private String id;
 	public Object input_data[] = new Object[7];
@@ -52,9 +48,9 @@ public class SubPanel extends JPanel implements ActionListener{
 
 		enrollButton.addActionListener(this);
 
-		JLabel lblId_1 = new JLabel("ID : " + id);
-		lblId_1.setBounds(14, 17, 121, 18);
-		add(lblId_1);
+		lblId = new JLabel("ID : " + id);
+		lblId.setBounds(14, 17, 121, 18);
+		add(lblId);
 		
 		table.getColumnModel().getColumn(5).setCellEditor(new SubTableCell("변경", id, table));
 		table.getColumnModel().getColumn(5).setCellRenderer(new SubTableCell("변경", id, table));
@@ -122,7 +118,6 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 				}
 			}
 		});
-		
 		
 	}
 

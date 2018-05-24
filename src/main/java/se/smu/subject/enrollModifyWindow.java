@@ -1,6 +1,5 @@
 package se.smu.subject;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
@@ -8,7 +7,6 @@ import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -42,7 +40,7 @@ public class enrollModifyWindow extends JFrame {
 	JComboBox start_comboBox;
 	JComboBox end_comboBox;
 	ButtonGroup grouprb;
-	private int row;
+	int row;
 	
 	public enrollModifyWindow(final DefaultTableModel subtableModel, final Object input_data[], final int row, final String id) {
 		setLocation(300, 300);

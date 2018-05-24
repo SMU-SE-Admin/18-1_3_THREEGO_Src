@@ -1,13 +1,10 @@
 package se.smu.todolist;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
@@ -17,9 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -27,9 +21,6 @@ import javax.swing.table.TableCellRenderer;
 import se.smu.alarm.Alarm;
 import se.smu.db.DBConnection;
 import se.smu.memo.Memo;
-
-import javax.swing.JScrollBar;
-import java.awt.Scrollbar;
 
 public class TodoPanel extends JPanel implements ActionListener {
 	private Vector<Object> todoData = new Vector<Object>();
@@ -54,12 +45,12 @@ public class TodoPanel extends JPanel implements ActionListener {
 		columns = initColumn();
 		todoModel = new DefaultTableModel(columns, 0);
 		
-		Alarm alarm = new Alarm(id);
+		new Alarm(id);
 		
 		refreshTable(id);
 		
 		tblTodo = new JTable(todoModel);
-		TodoSorting todoSorting = new TodoSorting(tblTodo, todoModel);
+		new TodoSorting(tblTodo, todoModel);
 		
 		tblTodo.getColumnModel().getColumn(0).setCellEditor(new TodoTableCell(id, "중요도", tblTodo));
 		tblTodo.getColumnModel().getColumn(0).setCellRenderer(new TodoTableCell(id, "중요도", tblTodo));
@@ -175,7 +166,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 				if ("변경".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
 					rowData = getRows(table, row);
-					Frame fr = new TodoModify(id, (DefaultTableModel) table.getModel(), rowData, row);
+					new TodoModify(id, (DefaultTableModel) table.getModel(), rowData, row);
 				}else if("삭제".equals(type)) {
 					if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 
 							JOptionPane.YES_NO_OPTION , JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
@@ -190,7 +181,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 				}else if("메모".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
 					rowData = getRows(table, row);
-					Frame fr = new Memo(id, rowData, table, row);
+					new Memo(id, rowData, table, row);
 				}				
 			}
 		});

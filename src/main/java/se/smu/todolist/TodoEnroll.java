@@ -23,7 +23,6 @@ import se.smu.db.DBConnection;
 
 public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 
-	private JPanel contentPane;
 	private JTextField tfSubject;
 	private JTextArea taWTD;
 	private JButton btnComplete;
@@ -151,30 +150,21 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 	private Vector<String> getDate(String _month) {
 		Vector<String> date = new Vector<String>();
 		int month = Integer.parseInt(_month);
-		switch (month) {
-		case 2:
+		
+		if(month == 2) {
 			for (int i = 1; i <= 28; i++) {
 				date.add(String.valueOf(i));
 			}
-			break;
-		case 1:
-		case 3:
-		case 5:
-		case 7:
-		case 8:
-		case 10:
-		case 12:
+		}else if(month == 1 || month == 3 || month == 5 || month == 7
+				|| month == 8 || month == 10 || month == 12) {
 			for (int i = 1; i <= 31; i++) {
 				date.add(String.valueOf(i));
 			}
-			break;
-		default:
+		}else {
 			for (int i = 1; i <= 30; i++) {
 				date.add(String.valueOf(i));
 			}
-			break;
 		}
-
 		return date;
 	}
 

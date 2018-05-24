@@ -18,7 +18,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import se.smu.db.DBConnection;
-import se.smu.todolist.TodoEnroll;
 
 public class SubPanel extends JPanel implements ActionListener{
 	private String subTitle[] = { "년도-학기", "과목명", "요일", "시간", "교수", "변경", "삭제" };

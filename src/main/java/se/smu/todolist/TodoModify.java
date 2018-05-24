@@ -12,7 +12,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -23,7 +22,6 @@ import se.smu.db.DBConnection;
 
 public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
-	private JPanel contentPane;
 	private JTextField tfSubject;
 	private JTextArea taWTD;
 	private JButton btnComplete;

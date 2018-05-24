@@ -17,10 +17,10 @@ public class Alarm {
 		int alarmMonth = cal.get(Calendar.MONTH)+1;
 		int alarmDay = cal.get(Calendar.DAY_OF_MONTH);
 		
-		Vector deadlines = sortData(id);
+		Vector<Object> deadlines = sortData(id);
 		
 		for(int i=0; i<deadlines.size(); i++) {
-			Vector vec = (Vector<Object>)deadlines.get(i);
+			Vector<Object> vec = (Vector<Object>) deadlines.get(i);
 			String[] time = vec.get(2).toString().split("\\.");
 			int month = Integer.parseInt(time[0]);
 			int day = Integer.parseInt(time[1]);

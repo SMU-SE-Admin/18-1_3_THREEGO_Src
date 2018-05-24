@@ -39,6 +39,8 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 	private JLabel lblState;
 	private JComboBox cbState;
 	private JComboBox cbImportance;
+	
+	private TodoController todoController;
 
 	/**
 	 * Create the frame.
@@ -47,6 +49,8 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		setLocation(800, 300);
 		setSize(550, 450);
 		getContentPane().setLayout(null);
+		
+		todoController = new TodoController();
 
 		todoModel = _todoModel;
 		todoData = _todoData;
@@ -84,23 +88,23 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		tfSubject.setColumns(10);
 
 		cbDeadMonth = new JComboBox();
-		cbDeadMonth.setModel(new DefaultComboBoxModel(getMonth()));
+		cbDeadMonth.setModel(new DefaultComboBoxModel(todoController.getMonth()));
 		cbDeadMonth.addItemListener(this);
 		cbDeadMonth.setBounds(205, 156, 57, 21);
 		getContentPane().add(cbDeadMonth);
 
 		cbDeadDate = new JComboBox();
-		cbDeadDate.setModel(new DefaultComboBoxModel(getDate(cbDeadMonth.getSelectedItem().toString())));
+		cbDeadDate.setModel(new DefaultComboBoxModel(todoController.getDate(cbDeadMonth.getSelectedItem().toString())));
 		cbDeadDate.setBounds(328, 156, 57, 21);
 		getContentPane().add(cbDeadDate);
 
 		cbRDeadMonth = new JComboBox();
-		cbRDeadMonth.setModel(new DefaultComboBoxModel(getMonth()));
+		cbRDeadMonth.setModel(new DefaultComboBoxModel(todoController.getMonth()));
 		cbRDeadMonth.setBounds(205, 198, 57, 21);
 		getContentPane().add(cbRDeadMonth);
 
 		cbRDeadDate = new JComboBox();
-		cbRDeadDate.setModel(new DefaultComboBoxModel(getDate(cbRDeadMonth.getSelectedItem().toString())));
+		cbRDeadDate.setModel(new DefaultComboBoxModel(todoController.getDate(cbRDeadMonth.getSelectedItem().toString())));
 		cbRDeadDate.setBounds(328, 198, 57, 21);
 		getContentPane().add(cbRDeadDate);
 
@@ -139,41 +143,12 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		setVisible(true);
 	}
 
-	private Vector<String> getMonth() {
-		Vector<String> month = new Vector<String>();
-		for (int i = 1; i <= 12; i++) {
-			month.add(String.valueOf(i));
-		}
-		return month;
-	}
-
-	private Vector<String> getDate(String _month) {
-		Vector<String> date = new Vector<String>();
-		int month = Integer.parseInt(_month);
-		
-		if(month == 2) {
-			for (int i = 1; i <= 28; i++) {
-				date.add(String.valueOf(i));
-			}
-		}else if(month == 1 || month == 3 || month == 5 || month == 7
-				|| month == 8 || month == 10 || month == 12) {
-			for (int i = 1; i <= 31; i++) {
-				date.add(String.valueOf(i));
-			}
-		}else {
-			for (int i = 1; i <= 30; i++) {
-				date.add(String.valueOf(i));
-			}
-		}
-		return date;
-	}
-
 	public void itemStateChanged(ItemEvent e) {
 		String month = e.getItem().toString();
 		if (e.getSource() == cbDeadMonth) {
-			cbDeadDate.setModel(new DefaultComboBoxModel(getDate(month)));
+			cbDeadDate.setModel(new DefaultComboBoxModel(todoController.getDate(month)));
 		} else if (e.getSource() == cbRDeadMonth) {
-			cbRDeadDate.setModel(new DefaultComboBoxModel(getDate(month)));
+			cbRDeadDate.setModel(new DefaultComboBoxModel(todoController.getDate(month)));
 		}
 
 	}
@@ -192,7 +167,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 				data.add(taWTD.getText());
 				data.add("");
 				
-				if(!checkDupl(todoModel, data)) {
+				if(!todoController.checkDupl(todoModel, data)) {
 					todoModel.addRow(data);
 					DBConnection con = new DBConnection();
 					con.setTodo(id, data);
@@ -206,22 +181,5 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 			}
 		}
 	}
-
 	
-	private boolean checkDupl(DefaultTableModel tm, Vector<Object> row) {
-		Vector data = tm.getDataVector();
-		for(int i=0; i<data.size(); i++) {
-			Vector tmp = (Vector) data.get(i);
-			int count = 0;
-			for(int j=0; j<row.size()-1; j++) {
-				if(tmp.get(j).equals(row.get(j))){
-					count++;
-				}
-			}
-			if(count == 6)
-				return true;
-			
-		}
-		return false;
-	}
 }

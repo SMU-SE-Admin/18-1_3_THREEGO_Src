@@ -22,23 +22,25 @@ import se.smu.db.DBConnection;
 
 public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
-	private JTextField tfSubject;
-	private JTextArea taWTD;
-	private JButton btnComplete;
+	private JTextField tfmSubject;
+	private JTextArea tamWTD;
+	private JButton btnmComplete;
 
-	private JComboBox cbDeadMonth;
-	private JComboBox cbDeadDate;
-	private JComboBox cbRDeadMonth;
-	private JComboBox cbRDeadDate;
+	private JComboBox cbmDeadMonth;
+	private JComboBox cbmDeadDate;
+	private JComboBox cbmRDeadMonth;
+	private JComboBox cbmRDeadDate;
 
 	private Vector<Object> todoData;
 	private DefaultTableModel todoModel;
 	private int row;
 	private String id;
 	
-	private JLabel lblState;
-	private JComboBox cbState;
-	private JComboBox cbImportance;
+	private JLabel lblmState;
+	private JComboBox cbmState;
+	private JComboBox cbmImportance;
+	
+	private TodoController mtodoController;
 
 	/**
 	 * Create the frame.
@@ -48,15 +50,17 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		setSize(550, 450);
 		getContentPane().setLayout(null);
 		
+		mtodoController = new TodoController();
+		
 		todoModel = _todoModel;
 		todoData = _todoData;
 		row = _row;
 		id = _id;
 
-		btnComplete = new JButton("완료");
-		btnComplete.setBounds(374, 45, 112, 42);
-		btnComplete.addActionListener(this);
-		getContentPane().add(btnComplete);
+		btnmComplete = new JButton("완료");
+		btnmComplete.setBounds(374, 45, 112, 42);
+		btnmComplete.addActionListener(this);
+		getContentPane().add(btnmComplete);
 
 		JLabel lblSubject = new JLabel("과목명");
 		lblSubject.setBounds(57, 113, 83, 26);
@@ -79,31 +83,31 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		lblToDoList.setBounds(57, 45, 106, 42);
 		getContentPane().add(lblToDoList);
 
-		tfSubject = new JTextField();
-		tfSubject.setBounds(162, 116, 324, 21);
-		getContentPane().add(tfSubject);
-		tfSubject.setColumns(10);
+		tfmSubject = new JTextField();
+		tfmSubject.setBounds(162, 116, 324, 21);
+		getContentPane().add(tfmSubject);
+		tfmSubject.setColumns(10);
 
-		cbDeadMonth = new JComboBox();
-		cbDeadMonth.setModel(new DefaultComboBoxModel(getMonth()));
-		cbDeadMonth.addItemListener(this);
-		cbDeadMonth.setBounds(205, 156, 57, 21);
-		getContentPane().add(cbDeadMonth);
+		cbmDeadMonth = new JComboBox();
+		cbmDeadMonth.setModel(new DefaultComboBoxModel(mtodoController.getMonth()));
+		cbmDeadMonth.addItemListener(this);
+		cbmDeadMonth.setBounds(205, 156, 57, 21);
+		getContentPane().add(cbmDeadMonth);
 
-		cbDeadDate = new JComboBox();
-		cbDeadDate.setModel(new DefaultComboBoxModel(getDate(cbDeadMonth.getSelectedItem().toString())));
-		cbDeadDate.setBounds(328, 156, 57, 21);
-		getContentPane().add(cbDeadDate);
+		cbmDeadDate = new JComboBox();
+		cbmDeadDate.setModel(new DefaultComboBoxModel(mtodoController.getDate(cbmDeadMonth.getSelectedItem().toString())));
+		cbmDeadDate.setBounds(328, 156, 57, 21);
+		getContentPane().add(cbmDeadDate);
 
-		cbRDeadMonth = new JComboBox();
-		cbRDeadMonth.setModel(new DefaultComboBoxModel(getMonth()));
-		cbRDeadMonth.setBounds(205, 198, 57, 21);
-		getContentPane().add(cbRDeadMonth);
+		cbmRDeadMonth = new JComboBox();
+		cbmRDeadMonth.setModel(new DefaultComboBoxModel(mtodoController.getMonth()));
+		cbmRDeadMonth.setBounds(205, 198, 57, 21);
+		getContentPane().add(cbmRDeadMonth);
 
-		cbRDeadDate = new JComboBox();
-		cbRDeadDate.setModel(new DefaultComboBoxModel(getDate(cbRDeadMonth.getSelectedItem().toString())));
-		cbRDeadDate.setBounds(328, 198, 57, 21);
-		getContentPane().add(cbRDeadDate);
+		cbmRDeadDate = new JComboBox();
+		cbmRDeadDate.setModel(new DefaultComboBoxModel(mtodoController.getDate(cbmRDeadMonth.getSelectedItem().toString())));
+		cbmRDeadDate.setBounds(328, 198, 57, 21);
+		getContentPane().add(cbmRDeadDate);
 
 		JLabel lblWave = new JLabel("~");
 		lblWave.setBounds(289, 159, 27, 15);
@@ -113,17 +117,17 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		lblWave2.setBounds(289, 201, 27, 15);
 		getContentPane().add(lblWave2);
 		
-		lblState = new JLabel("상태");
-		lblState.setBounds(57, 242, 83, 15);
-		getContentPane().add(lblState);
+		lblmState = new JLabel("상태");
+		lblmState.setBounds(57, 242, 83, 15);
+		getContentPane().add(lblmState);
 		
-		cbState = new JComboBox();
-		cbState.setModel(new DefaultComboBoxModel(new String[] {"신규","진행","해결"}));
-		cbState.setBounds(259, 239, 57, 21);
-		getContentPane().add(cbState);
+		cbmState = new JComboBox();
+		cbmState.setModel(new DefaultComboBoxModel(new String[] {"신규","진행","해결"}));
+		cbmState.setBounds(259, 239, 57, 21);
+		getContentPane().add(cbmState);
 		
-		taWTD = new JTextArea();
-		JScrollPane spWTD = new JScrollPane(taWTD);
+		tamWTD = new JTextArea();
+		JScrollPane spWTD = new JScrollPane(tamWTD);
 		spWTD.setBounds(162, 311, 324, 90);
 		getContentPane().add(spWTD);
 		
@@ -131,79 +135,41 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		lblImportance.setBounds(57, 279, 83, 15);
 		getContentPane().add(lblImportance);
 		
-		cbImportance = new JComboBox();
-		cbImportance.setBounds(259, 276, 57, 21);
-		cbImportance.setModel(new DefaultComboBoxModel(new String[] {"낮음","보통","높음"}));
-		getContentPane().add(cbImportance);
+		cbmImportance = new JComboBox();
+		cbmImportance.setBounds(259, 276, 57, 21);
+		cbmImportance.setModel(new DefaultComboBoxModel(new String[] {"낮음","보통","높음"}));
+		getContentPane().add(cbmImportance);
 
 		
 		loadData(_todoData);
 		setVisible(true);
 	}
 
-	private Vector<String> getMonth() {
-		Vector<String> month = new Vector<String>();
-		for (int i = 1; i <= 12; i++) {
-			month.add(String.valueOf(i));
-		}
-		return month;
-	}
-
-	private Vector<String> getDate(String _month) {
-		Vector<String> date = new Vector<String>();
-		int month = Integer.parseInt(_month);
-		switch (month) {
-		case 2:
-			for (int i = 1; i <= 28; i++) {
-				date.add(String.valueOf(i));
-			}
-			break;
-		case 1:
-		case 3:
-		case 5:
-		case 7:
-		case 8:
-		case 10:
-		case 12:
-			for (int i = 1; i <= 31; i++) {
-				date.add(String.valueOf(i));
-			}
-			break;
-		default:
-			for (int i = 1; i <= 30; i++) {
-				date.add(String.valueOf(i));
-			}
-			break;
-		}
-
-		return date;
-	}
-
 	public void itemStateChanged(ItemEvent e) {
 		String month = e.getItem().toString();
-		if (e.getSource() == cbDeadMonth) {
-			cbDeadDate.setModel(new DefaultComboBoxModel(getDate(month)));
-		} else if (e.getSource() == cbRDeadMonth) {
-			cbRDeadDate.setModel(new DefaultComboBoxModel(getDate(month)));
+		if (e.getSource() == cbmDeadMonth) {
+			cbmDeadDate.setModel(new DefaultComboBoxModel(mtodoController.getDate(month)));
+		} else if (e.getSource() == cbmRDeadMonth) {
+			cbmRDeadDate.setModel(new DefaultComboBoxModel(mtodoController.getDate(month)));
 		}
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnComplete) {
-			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
+		if (e.getSource() == btnmComplete) {
+			if (!tfmSubject.getText().equals("") && !tamWTD.getText().equals("")) {
 				Vector<Object> modi = new Vector<Object>();
-				modi.add(0, cbImportance.getSelectedIndex());
-				modi.add(1, tfSubject.getText());
-				modi.add(2, cbDeadMonth.getSelectedItem().toString()  + 
-						"." + cbDeadDate.getSelectedItem().toString());
-				modi.add(3, cbRDeadMonth.getSelectedItem().toString() +
-						"." + cbRDeadDate.getSelectedItem().toString().toString());
-				modi.add(4, cbState.getSelectedItem());
-				modi.add(5, taWTD.getText());
+				modi.add(0, cbmImportance.getSelectedIndex());
+				modi.add(1, tfmSubject.getText());
+				modi.add(2, cbmDeadMonth.getSelectedItem().toString()  + 
+						"." + cbmDeadDate.getSelectedItem().toString());
+				modi.add(3, cbmRDeadMonth.getSelectedItem().toString() +
+						"." + cbmRDeadDate.getSelectedItem().toString().toString());
+				modi.add(4, cbmState.getSelectedItem());
+				modi.add(5, tamWTD.getText());
 				modi.add(6, todoData.get(6));
 				
-				if(!checkDupl(todoModel, modi)) {
+				if(!mtodoController.checkDupl(todoModel, modi)) {
 					DBConnection db = new DBConnection();
 					db.updateTodo(id, todoData, modi);
 					db.close();
@@ -226,31 +192,14 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		String[] deadLine = data.get(2).toString().split("\\.");
 		String[] rdeadLine = data.get(3).toString().split("\\.");
 		
-		tfSubject.setText(data.get(1).toString());
-		cbDeadMonth.setSelectedItem(deadLine[0]);
-		cbDeadDate.setSelectedItem(deadLine[1]);
-		cbRDeadMonth.setSelectedItem(rdeadLine[0]);
-		cbRDeadDate.setSelectedItem(rdeadLine[1]);
-		cbState.setSelectedItem(data.get(4).toString());
-		cbImportance.setSelectedIndex((Integer)data.get(0));
-		taWTD.setText(data.get(5).toString());
-	}
-	
-	private boolean checkDupl(DefaultTableModel tm, Vector<Object> row) {
-		Vector data = tm.getDataVector();
-		for(int i=0; i<data.size(); i++) {
-			Vector tmp = (Vector) data.get(i);
-			int count = 0;
-			for(int j=0; j<row.size()-1; j++) {
-				if(tmp.get(j).equals(row.get(j))){
-					count++;
-				}
-			}
-			if(count == 6)
-				return true;
-			
-		}
-		return false;
+		tfmSubject.setText(data.get(1).toString());
+		cbmDeadMonth.setSelectedItem(deadLine[0]);
+		cbmDeadDate.setSelectedItem(deadLine[1]);
+		cbmRDeadMonth.setSelectedItem(rdeadLine[0]);
+		cbmRDeadDate.setSelectedItem(rdeadLine[1]);
+		cbmState.setSelectedItem(data.get(4).toString());
+		cbmImportance.setSelectedIndex((Integer)data.get(0));
+		tamWTD.setText(data.get(5).toString());
 	}
 
 }

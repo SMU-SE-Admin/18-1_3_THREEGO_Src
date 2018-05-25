@@ -64,7 +64,7 @@ public class SubPanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == enrollButton) {
-			Frame fs = new enrollWindow(subtableModel, input_data, id);
+			Frame fs = new SubEnroll(subtableModel, input_data, id);
 			fs.setVisible(true);
 		} 
 	}
@@ -101,7 +101,7 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 				if ("변경".equals(type)) {
 					Object input_data[] = new Object[7];
 					input_data = getRows(table, row);
-					Frame fr = new enrollModifyWindow((DefaultTableModel) table.getModel(), input_data, row, id);
+					Frame fr = new SubModify((DefaultTableModel) table.getModel(), input_data, row, id);
 					fr.setVisible(true);
 				}else if("삭제".equals(type)) {
 					if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 

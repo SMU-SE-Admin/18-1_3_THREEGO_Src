@@ -19,27 +19,14 @@ import javax.swing.table.DefaultTableModel;
 import se.smu.db.DBConnection;
 
 public class enrollWindow extends JFrame {
-	JTextField text_Sem;
-	JTextField text_Subname;
-	JTextField text_Profname;
-	String[] starthour = {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"};		
-	String[] endhour = {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"};
-	JButton completeButton;
-	JLabel sem_label;
-	JLabel subname_label;
-	JLabel today_label;
-	JLabel time_label;
-	JLabel profname_label;
-	JRadioButton rb1;
-	JRadioButton rb2;
-	JRadioButton rb3;
-	JRadioButton rb4;
-	JRadioButton rb5;
-	JRadioButton rb6;
-	JRadioButton rb7;
-	JComboBox start_comboBox;
-	JComboBox end_comboBox;
-	ButtonGroup grouprb;
+	protected JTextField text_Sem, text_Subname, text_Profname;
+	protected String[] starthour = {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"};		
+	protected String[] endhour = {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"};
+	protected JButton completeButton;
+	protected JLabel sem_label, subname_label, today_label, time_label, profname_label;
+	protected JRadioButton rb1, rb2, rb3, rb4, rb5, rb6, rb7;
+	protected JComboBox start_comboBox, end_comboBox;
+	protected ButtonGroup grouprb;
 	
 	public enrollWindow(final DefaultTableModel subtableModel, final Object input_data[], final String id) {
 		setLocation(300, 300);
@@ -89,39 +76,6 @@ public class enrollWindow extends JFrame {
 		text_Profname.setBounds(145, 252, 214, 26);
 		getContentPane().add(text_Profname);
 		
-		rb1 = new JRadioButton("월", true);
-		rb2 = new JRadioButton("화");
-		rb3 = new JRadioButton("수");
-		rb4 = new JRadioButton("목");
-		rb5 = new JRadioButton("금");
-		rb6 = new JRadioButton("토");
-		rb7 = new JRadioButton("일");
-		
-		grouprb = new ButtonGroup();
-		
-		grouprb.add(rb1);
-		rb1.setBounds(139, 172, 50, 20);
-		grouprb.add(rb2);
-		rb2.setBounds(189, 172, 50, 20);
-		grouprb.add(rb3);
-		rb3.setBounds(239, 172, 50, 20);
-		grouprb.add(rb4);
-		rb4.setBounds(289, 172, 50, 20);
-		grouprb.add(rb5);
-		rb5.setBounds(339, 172, 50, 20);
-		grouprb.add(rb6);
-		rb6.setBounds(389, 172, 50, 20);
-		grouprb.add(rb7);
-		rb7.setBounds(439, 172, 50, 20);
-	
-		getContentPane().add(rb1);
-		getContentPane().add(rb2);
-		getContentPane().add(rb3);
-		getContentPane().add(rb4);
-		getContentPane().add(rb5);
-		getContentPane().add(rb6);
-		getContentPane().add(rb7);
-		
 		start_comboBox = new JComboBox(starthour);
 		start_comboBox.setBounds(156, 214, 67, 24);
 		getContentPane().add(start_comboBox);
@@ -133,36 +87,9 @@ public class enrollWindow extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("   ~");
 		lblNewLabel_2.setBounds(239, 217, 36, 18);
 		getContentPane().add(lblNewLabel_2);
-
-		completeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(!text_Sem.getText().equals("") && !text_Subname.getText().equals("") && !text_Profname.getText().equals("")) {
-					input_data[0] = text_Sem.getText();
-					input_data[1] = text_Subname.getText();
-					input_data[2] = selectedRadioContents(grouprb);
-					input_data[3] = start_comboBox.getSelectedItem() + " ~ " + end_comboBox.getSelectedItem();
-					input_data[4] = text_Profname.getText();
-					input_data[5] = "변경";
-					input_data[6] = "삭제";
-					if(!checkDupl(subtableModel, input_data)) {
-						DBConnection db = new DBConnection();
-						db.setSubject(id, input_data);
-						db.close();
-						subtableModel.addRow(input_data);
-					}else {
-						JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
-					}
-					setVisible(false);
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
-				}
-				
-			}
-		});
 		
 	}
-	public String selectedRadioContents(ButtonGroup gr) {
+	protected String selectedRadioContents(ButtonGroup gr) {
 		Enumeration<AbstractButton> enums = gr.getElements();
 		String contents = "";
 		while(enums.hasMoreElements()) {            
@@ -174,7 +101,7 @@ public class enrollWindow extends JFrame {
 		return contents;
 	}
 	
-	private boolean checkDupl(DefaultTableModel tm, Object[] row) {
+	protected boolean checkDupl(DefaultTableModel tm, Object[] row) {
 		Vector data = tm.getDataVector();
 		for(int i=0; i<data.size(); i++) {
 			Vector tmp = (Vector) data.get(i);
@@ -190,5 +117,4 @@ public class enrollWindow extends JFrame {
 		}
 		return false;
 	}
-	
 }

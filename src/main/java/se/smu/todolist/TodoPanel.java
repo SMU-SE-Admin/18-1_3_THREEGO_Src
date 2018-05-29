@@ -43,13 +43,23 @@ public class TodoPanel extends JPanel implements ActionListener {
 		this.id = _id;
 
 		columns = initColumn();
-		todoModel = new DefaultTableModel(columns, 0);
+		todoModel = new DefaultTableModel(columns, 0) {
+			public boolean isCellEditable(int row, int col) {
+				if(col == 0 || col == 6 || col == 7 || col == 8) {
+					return true;
+				}else {
+					return false;
+				}
+			}
+		};
+		
 		
 		new Alarm(id);
 		
 		refreshTable(id);
 		
 		tblTodo = new JTable(todoModel);
+		tblTodo.getTableHeader().setReorderingAllowed(false);
 		new TodoSorting(tblTodo, todoModel);
 		
 		tblTodo.getColumnModel().getColumn(0).setCellEditor(new TodoTableCell(id, "중요도", tblTodo));
@@ -181,7 +191,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 				}else if("메모".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
 					rowData = getRows(table, row);
-					new Memo(id, rowData, table, table.convertRowIndexToModel(row));
+					new Memo(id, rowData, table, row);
 				}				
 			}
 		});

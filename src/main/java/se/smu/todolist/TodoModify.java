@@ -188,13 +188,10 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 					DBConnection db = new DBConnection();
 					db.updateTodo(id, todoData, modi);
 					db.close();
-					
-					System.out.println(row);
+				}
 					todoModel.insertRow(row, modi);
 					todoModel.removeRow(row+1);
-				}else {
-					JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
-				}
+				
 				
 				setVisible(false);
 			}

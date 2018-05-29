@@ -160,7 +160,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnmComplete) {
-			if (!tfmSubject.getText().equals("") && !tamWTD.getText().equals("")) {
+			if (!tfmSubject.getText().trim().equals("") && !tamWTD.getText().trim().equals("")) {
 				Vector<Object> modi = new Vector<Object>();
 				
 				String mdeadline = String.format("%02d", Integer.parseInt(cbmDeadMonth.getSelectedItem().toString())) + 

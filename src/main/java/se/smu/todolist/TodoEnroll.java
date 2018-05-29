@@ -154,7 +154,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnComplete) {
-			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
+			if (!tfSubject.getText().trim().equals("") && !taWTD.getText().trim().equals("")) {
 				Vector<Object> data = new Vector<Object>(todoData);
 				
 				String deadline = String.format("%02d", Integer.parseInt(cbDeadMonth.getSelectedItem().toString())) + 

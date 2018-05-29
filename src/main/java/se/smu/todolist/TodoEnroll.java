@@ -182,9 +182,9 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 				
 				if(!todoController.checkDupl(todoModel, data)) {
 					todoModel.addRow(data);
-					DBConnection con = new DBConnection();
-					con.setTodo(id, data);
-					con.close();
+					DBConnection db = new DBConnection();
+					db.setTodo(id, data);
+					db.close();
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);

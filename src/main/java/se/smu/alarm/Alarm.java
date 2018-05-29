@@ -13,7 +13,7 @@ public class Alarm {
 	
 	public Alarm(String id) {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -1);
+		cal.add(Calendar.DATE, +1);
 		int alarmMonth = cal.get(Calendar.MONTH)+1;
 		int alarmDay = cal.get(Calendar.DAY_OF_MONTH);
 		

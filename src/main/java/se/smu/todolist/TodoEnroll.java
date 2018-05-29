@@ -156,15 +156,29 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		if (e.getSource() == btnComplete) {
 			if (!tfSubject.getText().equals("") && !taWTD.getText().equals("")) {
 				Vector<Object> data = new Vector<Object>(todoData);
+				
+				String deadline = String.format("%02d", Integer.parseInt(cbDeadMonth.getSelectedItem().toString())) + 
+						"." + String.format("%02d", Integer.parseInt(cbDeadDate.getSelectedItem().toString()));
+				String rdeadline = String.format("%02d", Integer.parseInt(cbRDeadMonth.getSelectedItem().toString()))  + 
+						"." + String.format("%02d", Integer.parseInt(cbRDeadDate.getSelectedItem().toString()));
+				
+				
+				
 				data.add(cbImportance.getSelectedIndex());
 				data.add(tfSubject.getText());
 				data.add(cbDeadMonth.getSelectedItem().toString()  + 
 						"." + cbDeadDate.getSelectedItem().toString());
 				data.add(cbRDeadMonth.getSelectedItem().toString() +
-						"." + cbRDeadDate.getSelectedItem().toString().toString());
+						"." + cbRDeadDate.getSelectedItem().toString());
 				data.add(cbState.getSelectedItem());
 				data.add(taWTD.getText());
 				data.add("");
+				
+				if(todoController.checkDeadline(deadline, rdeadline)) {
+					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 늦습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				
 				if(!todoController.checkDupl(todoModel, data)) {
 					todoModel.addRow(data);

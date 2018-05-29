@@ -159,6 +159,13 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		if (e.getSource() == btnmComplete) {
 			if (!tfmSubject.getText().equals("") && !tamWTD.getText().equals("")) {
 				Vector<Object> modi = new Vector<Object>();
+				
+				String mdeadline = String.format("%02d", Integer.parseInt(cbmDeadMonth.getSelectedItem().toString())) + 
+						"." + String.format("%02d", Integer.parseInt(cbmDeadDate.getSelectedItem().toString()));
+				String mrdeadline = String.format("%02d", Integer.parseInt(cbmRDeadMonth.getSelectedItem().toString()))  + 
+						"." + String.format("%02d", Integer.parseInt(cbmRDeadDate.getSelectedItem().toString()));
+				
+				
 				modi.add(0, cbmImportance.getSelectedIndex());
 				modi.add(1, tfmSubject.getText());
 				modi.add(2, cbmDeadMonth.getSelectedItem().toString()  + 
@@ -168,6 +175,11 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 				modi.add(4, cbmState.getSelectedItem());
 				modi.add(5, tamWTD.getText());
 				modi.add(6, todoData.get(6));
+				
+				if(mtodoController.checkDeadline(mdeadline, mrdeadline)) {
+					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 늦습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
 				if(!mtodoController.checkDupl(todoModel, modi)) {
 					DBConnection db = new DBConnection();

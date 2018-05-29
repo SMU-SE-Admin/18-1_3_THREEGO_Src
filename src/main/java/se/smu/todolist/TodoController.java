@@ -51,4 +51,14 @@ public class TodoController {
 		}
 		return false;
 	}
+	
+	public boolean checkDeadline(String dead, String rdead) {
+		if(dead.compareTo(rdead) > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	
 }

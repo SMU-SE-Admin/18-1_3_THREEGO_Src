@@ -62,26 +62,26 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		btnmComplete.addActionListener(this);
 		getContentPane().add(btnmComplete);
 
-		JLabel lblSubject = new JLabel("과목명");
-		lblSubject.setBounds(57, 113, 83, 26);
-		getContentPane().add(lblSubject);
+		JLabel mlblSubject = new JLabel("과목명");
+		mlblSubject.setBounds(57, 113, 83, 26);
+		getContentPane().add(mlblSubject);
 
-		JLabel lblDeadine = new JLabel("마감일");
-		lblDeadine.setBounds(57, 159, 57, 15);
-		getContentPane().add(lblDeadine);
+		JLabel mlblDeadine = new JLabel("마감일");
+		mlblDeadine.setBounds(57, 159, 57, 15);
+		getContentPane().add(mlblDeadine);
 
-		JLabel lblRDeadline = new JLabel("실제 마감일");
-		lblRDeadline.setBounds(57, 201, 83, 15);
-		getContentPane().add(lblRDeadline);
+		JLabel mlblRDeadline = new JLabel("실제 마감일");
+		mlblRDeadline.setBounds(57, 201, 83, 15);
+		getContentPane().add(mlblRDeadline);
 
-		JLabel lblWTD = new JLabel("WHAT TO DO");
-		lblWTD.setBounds(57, 316, 83, 15);
-		getContentPane().add(lblWTD);
+		JLabel mlblWTD = new JLabel("WHAT TO DO");
+		mlblWTD.setBounds(57, 316, 83, 15);
+		getContentPane().add(mlblWTD);
 
-		JLabel lblToDoList = new JLabel("TO DO LIST");
-		lblToDoList.setHorizontalAlignment(SwingConstants.CENTER);
-		lblToDoList.setBounds(57, 45, 106, 42);
-		getContentPane().add(lblToDoList);
+		JLabel mlblToDoList = new JLabel("TO DO LIST");
+		mlblToDoList.setHorizontalAlignment(SwingConstants.CENTER);
+		mlblToDoList.setBounds(57, 45, 106, 42);
+		getContentPane().add(mlblToDoList);
 
 		tfmSubject = new JTextField();
 		tfmSubject.setBounds(162, 116, 324, 21);

@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -33,6 +34,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
 	private Vector<Object> todoData;
 	private DefaultTableModel todoModel;
+	private JTable table;
 	private int row;
 	private String id;
 	
@@ -45,7 +47,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 	/**
 	 * Create the frame.
 	 */
-	public TodoModify(String _id, final DefaultTableModel _todoModel, final Vector<Object> _todoData, final int _row) {
+	public TodoModify(String _id, final JTable table, final DefaultTableModel _todoModel, final Vector<Object> _todoData, final int _row) {
 		setLocation(800, 300);
 		setSize(550, 450);
 		getContentPane().setLayout(null);
@@ -54,7 +56,8 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		
 		todoModel = _todoModel;
 		todoData = _todoData;
-		row = _row;
+		this.table = table;
+		row = table.convertRowIndexToModel(_row);
 		id = _id;
 
 		btnmComplete = new JButton("완료");
@@ -186,6 +189,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 					db.updateTodo(id, todoData, modi);
 					db.close();
 					
+					System.out.println(row);
 					todoModel.insertRow(row, modi);
 					todoModel.removeRow(row+1);
 				}else {

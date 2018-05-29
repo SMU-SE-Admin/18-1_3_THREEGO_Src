@@ -166,7 +166,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 				if ("변경".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
 					rowData = getRows(table, row);
-					new TodoModify(id, (DefaultTableModel) table.getModel(), rowData, row);
+					new TodoModify(id, table, (DefaultTableModel) table.getModel(), rowData, row);
 				}else if("삭제".equals(type)) {
 					if(JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", 
 							JOptionPane.YES_NO_OPTION , JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
@@ -181,7 +181,7 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 				}else if("메모".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
 					rowData = getRows(table, row);
-					new Memo(id, rowData, table, row);
+					new Memo(id, rowData, table, table.convertRowIndexToModel(row));
 				}				
 			}
 		});

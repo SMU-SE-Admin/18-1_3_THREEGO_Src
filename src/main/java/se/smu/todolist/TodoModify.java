@@ -34,7 +34,6 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 
 	private Vector<Object> todoData;
 	private DefaultTableModel todoModel;
-	private JTable table;
 	private int row;
 	private String id;
 	
@@ -56,7 +55,6 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		
 		todoModel = _todoModel;
 		todoData = _todoData;
-		this.table = table;
 		row = table.convertRowIndexToModel(_row);
 		id = _id;
 

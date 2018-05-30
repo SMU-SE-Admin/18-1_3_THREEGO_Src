@@ -35,11 +35,11 @@ public class SubPanel extends JPanel implements ActionListener{
 		setSize(500, 400);
 		subtableModel = new DefaultTableModel(subTitle, 0);
 		table = new JTable(subtableModel);
-		
 		refreshTable(id, subtableModel, subTitle);
 
 		sp = new JScrollPane(table);
 		sp.setBounds(0, 47, 500, 350);
+		sp.getViewport().setBackground(Color.WHITE);
 		add(sp);
 
 		enrollButton = new JButton("등록");
@@ -98,7 +98,7 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 			
 			public void actionPerformed(ActionEvent e) {
 				String type = btn.getText();
-				int row = table.getSelectedRow();
+				int row = (table.getSelectedRow() == -1 ? 0 : table.getSelectedRow()) ;
 				if ("변경".equals(type)) {
 					Object input_data[] = new Object[7];
 					input_data = getRows(table, row);
@@ -113,6 +113,7 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 							int tmRow = table.convertRowIndexToModel(row);
 							DefaultTableModel tm = (DefaultTableModel) table.getModel();
 							tm.removeRow(tmRow);
+							table.setModel(tm);
 						}
 					}
 				}

@@ -175,7 +175,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 				data.add("");
 				
 				if(todoController.checkDeadline(deadline, rdeadline)) {
-					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 늦습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 빠릅니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				

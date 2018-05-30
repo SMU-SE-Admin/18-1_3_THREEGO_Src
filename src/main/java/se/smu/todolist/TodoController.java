@@ -53,7 +53,7 @@ public class TodoController {
 	}
 	
 	public boolean checkDeadline(String dead, String rdead) {
-		if(dead.compareTo(rdead) > 0) {
+		if(dead.compareTo(rdead) < 0) {
 			return true;
 		}else {
 			return false;

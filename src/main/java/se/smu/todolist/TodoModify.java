@@ -178,7 +178,7 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 				modi.add(6, todoData.get(6));
 				
 				if(mtodoController.checkDeadline(mdeadline, mrdeadline)) {
-					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 늦습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 빠릅니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				

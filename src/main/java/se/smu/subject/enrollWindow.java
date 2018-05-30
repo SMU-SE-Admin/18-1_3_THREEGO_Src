@@ -1,7 +1,5 @@
 package se.smu.subject;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -11,12 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
-import se.smu.db.DBConnection;
 
 public class enrollWindow extends JFrame {
 	protected JTextField text_Sem, text_Subname, text_Profname;

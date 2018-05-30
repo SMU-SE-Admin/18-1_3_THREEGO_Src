@@ -1,22 +1,18 @@
 package se.smu;
 
-import java.awt.Color;
+import java.awt.Font;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-
-import java.awt.Font;
-import java.awt.Frame;
-
 import javax.swing.JTextField;
 
 import se.smu.db.DBConnection;
-
-import javax.swing.JButton;
 
 public class LoginFrame extends JFrame implements ActionListener {
 	private JTextField textField;
@@ -27,7 +23,6 @@ public class LoginFrame extends JFrame implements ActionListener {
 	public LoginFrame() {
 		setTitle("로그인");
 		setSize(400,400);
-		getContentPane().setBackground(new Color(253, 199, 199));
 		setLocation(450, 300);
 		getContentPane().setLayout(null);
 	
@@ -67,7 +62,6 @@ public class LoginFrame extends JFrame implements ActionListener {
 		LoginButton = new JButton("로그인");
 		LoginButton.setFont(new Font("im", Font.BOLD, 18));
 		LoginButton.setBounds(117, 280, 136, 31);
-		LoginButton.setBackground(new Color(255,124,128));
 		getContentPane().add(LoginButton);
 			
 		LoginButton.addActionListener(this);

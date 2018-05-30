@@ -50,14 +50,25 @@ public class SubEnroll extends enrollWindow{
 		
 		completeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!text_Sem.getText().equals("") && !text_Subname.getText().equals("") && !text_Profname.getText().equals("")) {
+				if(!text_Sem.getText().trim().equals("") && !text_Subname.getText().trim().equals("") && !text_Profname.getText().trim().equals("")) {		
 					input_data[0] = text_Sem.getText();
 					input_data[1] = text_Subname.getText();
 					input_data[2] = selectedRadioContents(grouprb);
-					input_data[3] = start_comboBox.getSelectedItem() + " ~ " + end_comboBox.getSelectedItem();
+					if(start_comboBox.getSelectedIndex() > end_comboBox.getSelectedIndex()) {
+						JOptionPane.showMessageDialog(null, "강의 시작 시간이 끝나는 시간보다 늦습니다", "ERROR", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					else if(start_comboBox.getSelectedIndex() == end_comboBox.getSelectedIndex()) {
+						JOptionPane.showMessageDialog(null, "강의 시작 시간과 끝나는 시간이 같습니다", "ERROR", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					else
+						input_data[3] = start_comboBox.getSelectedItem() + " ~ " + end_comboBox.getSelectedItem();
 					input_data[4] = text_Profname.getText();
 					input_data[5] = "변경";
 					input_data[6] = "삭제";
+					
+					
 					if(!checkDupl(subtableModel, input_data)) {
 						DBConnection db = new DBConnection();
 						db.setSubject(id, input_data);

@@ -1,5 +1,6 @@
 package se.smu.subject;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -55,7 +56,7 @@ public class SubPanel extends JPanel implements ActionListener{
 		table.getColumnModel().getColumn(5).setCellRenderer(new SubTableCell("변경", id, table));
 		table.getColumnModel().getColumn(6).setCellEditor(new SubTableCell("삭제", id, table));
 		table.getColumnModel().getColumn(6).setCellRenderer(new SubTableCell("삭제", id, table));
-		
+			
 		this.id = id;
 		
 		this.setVisible(true);
@@ -119,7 +120,6 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 		});
 		
 	}
-
 	public Object getCellEditorValue() {
 		// TODO Auto-generated method stub
 		return null;

@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -20,10 +21,12 @@ public class enrollWindow extends JFrame {
 	protected JButton completeButton;
 	protected JLabel sem_label, subname_label, today_label, time_label, profname_label;
 	protected JRadioButton rb1, rb2, rb3, rb4, rb5, rb6, rb7;
+	protected JRadioButton[] rbs;
 	protected JComboBox start_comboBox, end_comboBox;
 	protected ButtonGroup grouprb;
+	protected String today[] = {"월", "화", "수", "목", "금", "토", "일"};
 	
-	public enrollWindow(final DefaultTableModel subtableModel, final Object input_data[], final String id) {
+	public enrollWindow(final String id) {
 		setLocation(300, 300);
 		setSize(520,400);
 		getContentPane().setLayout(null);
@@ -112,4 +115,36 @@ public class enrollWindow extends JFrame {
 		}
 		return false;
 	}
+	
+	protected void setRB(String[] name, boolean[] selected) {
+		rbs = new JRadioButton[7];
+		grouprb = new ButtonGroup();
+		
+		for(int i=0; i<rbs.length; i++) {
+			rbs[i] = new JRadioButton(name[i], selected[i]);
+			grouprb.add(rbs[i]);
+			rbs[i].setBounds(139 + i*50, 172, 50, 20);
+			getContentPane().add(rbs[i]);
+		}
+	}
+	
+	protected void beforeEnroll(Object[] input_data, DefaultTableModel subtableModel) {
+		input_data[0] = text_Sem.getText();
+		input_data[1] = text_Subname.getText();
+		input_data[2] = selectedRadioContents(grouprb);
+		if(start_comboBox.getSelectedIndex() > end_comboBox.getSelectedIndex()) {
+			JOptionPane.showMessageDialog(null, "강의 시작 시간이 끝나는 시간보다 늦습니다", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		else if(start_comboBox.getSelectedIndex() == end_comboBox.getSelectedIndex()) {
+			JOptionPane.showMessageDialog(null, "강의 시작 시간과 끝나는 시간이 같습니다", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		else
+			input_data[3] = start_comboBox.getSelectedItem() + " ~ " + end_comboBox.getSelectedItem();
+		input_data[4] = text_Profname.getText();
+		input_data[5] = "변경";
+		input_data[6] = "삭제";
+	}
+	
 }

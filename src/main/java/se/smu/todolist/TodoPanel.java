@@ -36,7 +36,7 @@ public class TodoPanel extends JPanel implements ActionListener {
 	public TodoPanel(String _id) {
 		setLayout(null);
 		setSize(1255, 400);
-		
+
 		JLabel lblTitle = new JLabel("To Do List");
 		lblTitle.setBounds(514, 17, 121, 18);
 		add(lblTitle);
@@ -181,13 +181,12 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 					if (JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", JOptionPane.YES_NO_OPTION,
 							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
 						DBConnection db = new DBConnection();
-						if (db.deleteTodo(id, getRows(table, row))) {
-							db.close();
-							int tmRow = table.convertRowIndexToModel(row);
-							DefaultTableModel tm = (DefaultTableModel) table.getModel();
-							tm.removeRow(tmRow);
-							table.setModel(tm);
-						}
+						db.deleteTodo(id, getRows(table, row));
+						db.close();
+						int tmRow = table.convertRowIndexToModel(row);
+						DefaultTableModel tm = (DefaultTableModel) table.getModel();
+						tm.removeRow(tmRow);
+						table.setModel(tm);
 					}
 				} else if ("메모".equals(type)) {
 					Vector<Object> rowData = new Vector<Object>();
@@ -202,10 +201,10 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 		// TODO Auto-generated method stub
 		int rowNum = tbl.getSelectedRow();
 		int colNum = tbl.getSelectedColumn();
-		if(colNum == 1) {
+		if (colNum == 1) {
 			int color = (Integer) tbl.getValueAt(rowNum, 0);
 			return color;
-		}else {
+		} else {
 			Object value = tbl.getValueAt(rowNum, colNum);
 			return value;
 		}

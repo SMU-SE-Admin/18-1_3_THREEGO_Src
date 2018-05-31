@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 public class TodoController {
-	
+	// 달을 벡터화 하여 반환
 	public Vector<String> getMonth() {
 		Vector<String> month = new Vector<String>();
 		for (int i = 1; i <= 12; i++) {
@@ -14,51 +14,52 @@ public class TodoController {
 		return month;
 	}
 
+	// 해당 달에 맞는 일자를 벡터화 하여 반환
 	public Vector<String> getDate(String _month) {
 		Vector<String> date = new Vector<String>();
 		int month = Integer.parseInt(_month);
-		
-		if(month == 2) {
+
+		if (month == 2) {
 			for (int i = 1; i <= 28; i++) {
 				date.add(String.valueOf(i));
 			}
-		}else if(month == 1 || month == 3 || month == 5 || month == 7
-				|| month == 8 || month == 10 || month == 12) {
+		} else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
 			for (int i = 1; i <= 31; i++) {
 				date.add(String.valueOf(i));
 			}
-		}else {
+		} else {
 			for (int i = 1; i <= 30; i++) {
 				date.add(String.valueOf(i));
 			}
 		}
 		return date;
 	}
-	
+
+	// 중복검사
 	public boolean checkDupl(DefaultTableModel tm, Vector<Object> row) {
 		Vector data = tm.getDataVector();
-		for(int i=0; i<data.size(); i++) {
+		for (int i = 0; i < data.size(); i++) {
 			Vector tmp = (Vector) data.get(i);
 			int count = 0;
-			for(int j=0; j<row.size()-1; j++) {
-				if(tmp.get(j).equals(row.get(j))){
+			for (int j = 0; j < row.size() - 1; j++) {
+				if (tmp.get(j).equals(row.get(j))) {
 					count++;
 				}
 			}
-			if(count == 6)
+			if (count == 6)
 				return true;
-			
+
 		}
 		return false;
 	}
-	
+
+	// 마감일과 실제 마감일 검사
 	public boolean checkDeadline(String dead, String rdead) {
-		if(dead.compareTo(rdead) < 0) {
+		if (dead.compareTo(rdead) < 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
-	
+
 }

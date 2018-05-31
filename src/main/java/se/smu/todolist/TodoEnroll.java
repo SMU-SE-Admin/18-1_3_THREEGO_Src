@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import se.smu.db.DBConnection;
 
 public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
-
+	// 기본 변수 선언
 	private JTextField tfSubject;
 	private JTextArea taWTD;
 	private JButton btnComplete;
@@ -33,12 +33,12 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 
 	private Vector<Object> todoData;
 	private String id;
-	
+
 	private DefaultTableModel todoModel;
 	private JLabel lblState;
 	private JComboBox cbState;
 	private JComboBox cbImportance;
-	
+
 	private TodoController todoController;
 
 	/**
@@ -48,13 +48,14 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		setLocation(800, 300);
 		setSize(550, 450);
 		getContentPane().setLayout(null);
-		
+
 		todoController = new TodoController();
 
 		todoModel = _todoModel;
 		todoData = _todoData;
 		id = _id;
 
+		// Swing 객체 선언 및 설정
 		btnComplete = new JButton("완료");
 		btnComplete.setBounds(374, 45, 112, 42);
 		btnComplete.addActionListener(this);
@@ -103,10 +104,10 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		getContentPane().add(cbRDeadMonth);
 
 		cbRDeadDate = new JComboBox();
-		cbRDeadDate.setModel(new DefaultComboBoxModel(todoController.getDate(cbRDeadMonth.getSelectedItem().toString())));
+		cbRDeadDate
+				.setModel(new DefaultComboBoxModel(todoController.getDate(cbRDeadMonth.getSelectedItem().toString())));
 		cbRDeadDate.setBounds(328, 198, 57, 21);
 		getContentPane().add(cbRDeadDate);
-
 
 		JLabel lblWave = new JLabel("~");
 		lblWave.setBounds(289, 159, 27, 15);
@@ -124,16 +125,16 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		cbState.setModel(new DefaultComboBoxModel(new String[] { "신규", "진행", "해결" }));
 		cbState.setBounds(259, 239, 57, 21);
 		getContentPane().add(cbState);
-		
+
 		taWTD = new JTextArea();
 		JScrollPane spWTD = new JScrollPane(taWTD);
 		spWTD.setBounds(162, 311, 324, 90);
 		getContentPane().add(spWTD);
-		
+
 		JLabel lblImportance = new JLabel("중요도");
 		lblImportance.setBounds(57, 279, 83, 15);
 		getContentPane().add(lblImportance);
-		
+
 		cbImportance = new JComboBox();
 		cbImportance.setBounds(259, 276, 57, 21);
 		cbImportance.setModel(new DefaultComboBoxModel(new String[] { "낮음", "보통", "높음" }));
@@ -142,6 +143,7 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 		setVisible(true);
 	}
 
+	// 달 선택시 달에 맞는 일로 설정해준다.
 	public void itemStateChanged(ItemEvent e) {
 		String month = e.getItem().toString();
 		if (e.getSource() == cbDeadMonth) {
@@ -153,47 +155,48 @@ public class TodoEnroll extends JFrame implements ItemListener, ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		// 완료 버튼 클릭 시
 		if (e.getSource() == btnComplete) {
+			// 누락이 없는지 검사
 			if (!tfSubject.getText().trim().equals("") && !taWTD.getText().trim().equals("")) {
 				Vector<Object> data = new Vector<Object>(todoData);
-				
-				String deadline = String.format("%02d", Integer.parseInt(cbDeadMonth.getSelectedItem().toString())) + 
-						"." + String.format("%02d", Integer.parseInt(cbDeadDate.getSelectedItem().toString()));
-				String rdeadline = String.format("%02d", Integer.parseInt(cbRDeadMonth.getSelectedItem().toString()))  + 
-						"." + String.format("%02d", Integer.parseInt(cbRDeadDate.getSelectedItem().toString()));
-				
-				
-				
+
+				// 달과 일을 두자리 문자열로 변환, 한 자리라면 앞에 0으로 채운다.
+				String deadline = String.format("%02d", Integer.parseInt(cbDeadMonth.getSelectedItem().toString()))
+						+ "." + String.format("%02d", Integer.parseInt(cbDeadDate.getSelectedItem().toString()));
+				String rdeadline = String.format("%02d", Integer.parseInt(cbRDeadMonth.getSelectedItem().toString()))
+						+ "." + String.format("%02d", Integer.parseInt(cbRDeadDate.getSelectedItem().toString()));
+
 				data.add(cbImportance.getSelectedIndex());
 				data.add(tfSubject.getText());
-				data.add(cbDeadMonth.getSelectedItem().toString()  + 
-						"." + cbDeadDate.getSelectedItem().toString());
-				data.add(cbRDeadMonth.getSelectedItem().toString() +
-						"." + cbRDeadDate.getSelectedItem().toString());
+				data.add(cbDeadMonth.getSelectedItem().toString() + "." + cbDeadDate.getSelectedItem().toString());
+				data.add(cbRDeadMonth.getSelectedItem().toString() + "." + cbRDeadDate.getSelectedItem().toString());
 				data.add(cbState.getSelectedItem());
 				data.add(taWTD.getText());
 				data.add("");
-				
-				if(todoController.checkDeadline(deadline, rdeadline)) {
+
+				// 마감일과 실제마감일 검사
+				if (todoController.checkDeadline(deadline, rdeadline)) {
 					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 빠릅니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
-				
-				if(!todoController.checkDupl(todoModel, data)) {
+
+				// 중복 검사
+				if (!todoController.checkDupl(todoModel, data)) {
 					todoModel.addRow(data);
 					DBConnection db = new DBConnection();
 					db.setTodo(id, data);
 					db.close();
-				}
-				else {
+				} else {
+					// 중복이 있다면 오류
 					JOptionPane.showMessageDialog(null, "중복된 과목이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				setVisible(false);
 			} else {
+				// 누락이 있다면 오류
 				JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
-	
+
 }

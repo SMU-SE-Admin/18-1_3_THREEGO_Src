@@ -21,8 +21,8 @@ import javax.swing.table.DefaultTableModel;
 
 import se.smu.db.DBConnection;
 
-public class TodoModify extends JFrame implements ActionListener, ItemListener{
-
+public class TodoModify extends JFrame implements ActionListener, ItemListener {
+	// 클래서의 기본 변수 선언
 	private JTextField tfmSubject;
 	private JTextArea tamWTD;
 	private JButton btnmComplete;
@@ -36,28 +36,31 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 	private DefaultTableModel todoModel;
 	private int row;
 	private String id;
-	
+
 	private JLabel lblmState;
 	private JComboBox cbmState;
 	private JComboBox cbmImportance;
-	
+
 	private TodoController mtodoController;
 
 	/**
 	 * Create the frame.
 	 */
-	public TodoModify(String _id, final JTable table, final DefaultTableModel _todoModel, final Vector<Object> _todoData, final int _row) {
+	public TodoModify(String _id, final JTable table, final DefaultTableModel _todoModel,
+			final Vector<Object> _todoData, final int _row) {
+		// 기본 크기와 위치를 설정
 		setLocation(800, 300);
 		setSize(550, 450);
 		getContentPane().setLayout(null);
-		
+
 		mtodoController = new TodoController();
-		
+
 		todoModel = _todoModel;
 		todoData = _todoData;
 		row = table.convertRowIndexToModel(_row);
 		id = _id;
 
+		// Swing 의 객체 생성 및 설정
 		btnmComplete = new JButton("완료");
 		btnmComplete.setBounds(374, 45, 112, 42);
 		btnmComplete.addActionListener(this);
@@ -96,7 +99,8 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		getContentPane().add(cbmDeadMonth);
 
 		cbmDeadDate = new JComboBox();
-		cbmDeadDate.setModel(new DefaultComboBoxModel(mtodoController.getDate(cbmDeadMonth.getSelectedItem().toString())));
+		cbmDeadDate
+				.setModel(new DefaultComboBoxModel(mtodoController.getDate(cbmDeadMonth.getSelectedItem().toString())));
 		cbmDeadDate.setBounds(328, 156, 57, 21);
 		getContentPane().add(cbmDeadDate);
 
@@ -106,7 +110,8 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		getContentPane().add(cbmRDeadMonth);
 
 		cbmRDeadDate = new JComboBox();
-		cbmRDeadDate.setModel(new DefaultComboBoxModel(mtodoController.getDate(cbmRDeadMonth.getSelectedItem().toString())));
+		cbmRDeadDate.setModel(
+				new DefaultComboBoxModel(mtodoController.getDate(cbmRDeadMonth.getSelectedItem().toString())));
 		cbmRDeadDate.setBounds(328, 198, 57, 21);
 		getContentPane().add(cbmRDeadDate);
 
@@ -117,35 +122,36 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 		JLabel lblWave2 = new JLabel("~");
 		lblWave2.setBounds(289, 201, 27, 15);
 		getContentPane().add(lblWave2);
-		
+
 		lblmState = new JLabel("상태");
 		lblmState.setBounds(57, 242, 83, 15);
 		getContentPane().add(lblmState);
-		
+
 		cbmState = new JComboBox();
-		cbmState.setModel(new DefaultComboBoxModel(new String[] {"신규","진행","해결"}));
+		cbmState.setModel(new DefaultComboBoxModel(new String[] { "신규", "진행", "해결" }));
 		cbmState.setBounds(259, 239, 57, 21);
 		getContentPane().add(cbmState);
-		
+
 		tamWTD = new JTextArea();
 		JScrollPane spWTD = new JScrollPane(tamWTD);
 		spWTD.setBounds(162, 311, 324, 90);
 		getContentPane().add(spWTD);
-		
+
 		JLabel lblImportance = new JLabel("중요도");
 		lblImportance.setBounds(57, 279, 83, 15);
 		getContentPane().add(lblImportance);
-		
+
 		cbmImportance = new JComboBox();
 		cbmImportance.setBounds(259, 276, 57, 21);
-		cbmImportance.setModel(new DefaultComboBoxModel(new String[] {"낮음","보통","높음"}));
+		cbmImportance.setModel(new DefaultComboBoxModel(new String[] { "낮음", "보통", "높음" }));
 		getContentPane().add(cbmImportance);
 
-		
+		// 기존 데이터를 불러온다.
 		loadData(_todoData);
 		setVisible(true);
 	}
 
+	// 달을 선택했을 때 해당 달에 맞는 일자로 설정한다
 	public void itemStateChanged(ItemEvent e) {
 		String month = e.getItem().toString();
 		if (e.getSource() == cbmDeadMonth) {
@@ -157,59 +163,62 @@ public class TodoModify extends JFrame implements ActionListener, ItemListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		// 완료 버튼 클릭시
 		if (e.getSource() == btnmComplete) {
+			// 누락이 없을 시
 			if (!tfmSubject.getText().trim().equals("") && !tamWTD.getText().trim().equals("")) {
 				Vector<Object> modi = new Vector<Object>();
-				
-				String mdeadline = String.format("%02d", Integer.parseInt(cbmDeadMonth.getSelectedItem().toString())) + 
-						"." + String.format("%02d", Integer.parseInt(cbmDeadDate.getSelectedItem().toString()));
-				String mrdeadline = String.format("%02d", Integer.parseInt(cbmRDeadMonth.getSelectedItem().toString()))  + 
-						"." + String.format("%02d", Integer.parseInt(cbmRDeadDate.getSelectedItem().toString()));
-				
-				
+
+				// 두자리 문자열로 바꾼다. 한자리라면 앞에 0을 추가하여 두자리로 바꾼다.
+				String mdeadline = String.format("%02d", Integer.parseInt(cbmDeadMonth.getSelectedItem().toString()))
+						+ "." + String.format("%02d", Integer.parseInt(cbmDeadDate.getSelectedItem().toString()));
+				String mrdeadline = String.format("%02d", Integer.parseInt(cbmRDeadMonth.getSelectedItem().toString()))
+						+ "." + String.format("%02d", Integer.parseInt(cbmRDeadDate.getSelectedItem().toString()));
+
 				modi.add(0, cbmImportance.getSelectedIndex());
 				modi.add(1, tfmSubject.getText());
-				modi.add(2, cbmDeadMonth.getSelectedItem().toString()  + 
-						"." + cbmDeadDate.getSelectedItem().toString());
-				modi.add(3, cbmRDeadMonth.getSelectedItem().toString() +
-						"." + cbmRDeadDate.getSelectedItem().toString().toString());
+				modi.add(2, cbmDeadMonth.getSelectedItem().toString() + "." + cbmDeadDate.getSelectedItem().toString());
+				modi.add(3, cbmRDeadMonth.getSelectedItem().toString() + "."
+						+ cbmRDeadDate.getSelectedItem().toString().toString());
 				modi.add(4, cbmState.getSelectedItem());
 				modi.add(5, tamWTD.getText());
 				modi.add(6, todoData.get(6));
-				
-				if(mtodoController.checkDeadline(mdeadline, mrdeadline)) {
+
+				// 마감일이 실제 마감일보다 빠르다면 오류
+				if (mtodoController.checkDeadline(mdeadline, mrdeadline)) {
 					JOptionPane.showMessageDialog(null, "마감일이 실제 마감일보다 빠릅니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
-				if(!mtodoController.checkDupl(todoModel, modi)) {
+
+				// 중복이 있는지 검사
+				if (!mtodoController.checkDupl(todoModel, modi)) {
 					DBConnection db = new DBConnection();
 					db.updateTodo(id, todoData, modi);
 					db.close();
 				}
-					todoModel.insertRow(row, modi);
-					todoModel.removeRow(row+1);
-				
-				
+				todoModel.insertRow(row, modi);
+				todoModel.removeRow(row + 1);
+
 				setVisible(false);
-			}
-			else {
+			} else {
+				// 누락이 있다면 오류
 				JOptionPane.showMessageDialog(null, "누락된 곳이 있습니다!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
-	
+
+	// 기존 데이터를 불러온다.
 	private void loadData(Vector<Object> data) {
 		String[] deadLine = data.get(2).toString().split("\\.");
 		String[] rdeadLine = data.get(3).toString().split("\\.");
-		
+
 		tfmSubject.setText(data.get(1).toString());
 		cbmDeadMonth.setSelectedItem(deadLine[0]);
 		cbmDeadDate.setSelectedItem(deadLine[1]);
 		cbmRDeadMonth.setSelectedItem(rdeadLine[0]);
 		cbmRDeadDate.setSelectedItem(rdeadLine[1]);
 		cbmState.setSelectedItem(data.get(4).toString());
-		cbmImportance.setSelectedIndex((Integer)data.get(0));
+		cbmImportance.setSelectedIndex((Integer) data.get(0));
 		tamWTD.setText(data.get(5).toString());
 	}
 

@@ -3,6 +3,7 @@ package se.smu.todolist;
 import java.io.Serializable;
 
 public class TodoInfo implements Serializable {
+	// 기본 변수 선언
 	private Object importance;
 	private Object tfSubject;
 	private Object cbDeadMonth;
@@ -11,6 +12,7 @@ public class TodoInfo implements Serializable {
 	private Object tfWTD;
 	private Object memo;
 
+	// 기본 변수의 Getter, Setter
 	public Object getImportance() {
 		return importance;
 	}
@@ -58,16 +60,18 @@ public class TodoInfo implements Serializable {
 	public void setTfWTD(Object tfWTD) {
 		this.tfWTD = tfWTD;
 	}
-	
+
 	public Object getMemo() {
 		return memo;
 	}
-	
+
 	public void setMemo(Object memo) {
 		this.memo = memo;
 	}
 
-	TodoInfo(Object importance, Object tfSubject, Object cbDeadMonth, Object cbRDeadMonth, Object cbState, Object tfWTD, Object memo) {
+	// 생성자
+	TodoInfo(Object importance, Object tfSubject, Object cbDeadMonth, Object cbRDeadMonth, Object cbState, Object tfWTD,
+			Object memo) {
 		this.importance = importance;
 		this.tfSubject = tfSubject;
 		this.cbDeadMonth = cbDeadMonth;

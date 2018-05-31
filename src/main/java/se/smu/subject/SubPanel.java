@@ -38,8 +38,18 @@ public class SubPanel extends JPanel implements ActionListener {
 		setSize(500, 400);
 
 		// 테이블과 테이블 모델을 초기화한다.
-		subtableModel = new DefaultTableModel(subTitle, 0);
+		subtableModel = new DefaultTableModel(subTitle, 0) {
+			public boolean isCellEditable(int row, int col) {
+				if (col == 5 || col == 6) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+			
 		table = new JTable(subtableModel);
+		table.getTableHeader().setReorderingAllowed(false);
 
 		// 데이터베이스와 연결하여 테이블을 새로고침한다.
 		refreshTable(id, subtableModel, subTitle);

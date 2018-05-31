@@ -136,21 +136,22 @@ public class enrollWindow extends JFrame {
 	}
 
 	// 등록 전 기본적인 사항들을 확인한다.
-	protected void beforeEnroll(Object[] input_data, DefaultTableModel subtableModel) {
+	protected boolean beforeEnroll(Object[] input_data, DefaultTableModel subtableModel) {
 		input_data[0] = text_Sem.getText();
 		input_data[1] = text_Subname.getText();
 		input_data[2] = selectedRadioContents(grouprb);
 		if (start_comboBox.getSelectedIndex() > end_comboBox.getSelectedIndex()) {
 			JOptionPane.showMessageDialog(null, "강의 시작 시간이 끝나는 시간보다 늦습니다", "ERROR", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		} else if (start_comboBox.getSelectedIndex() == end_comboBox.getSelectedIndex()) {
 			JOptionPane.showMessageDialog(null, "강의 시작 시간과 끝나는 시간이 같습니다", "ERROR", JOptionPane.ERROR_MESSAGE);
-			return;
-		} else
+			return false;
+		} else 
 			input_data[3] = start_comboBox.getSelectedItem() + " ~ " + end_comboBox.getSelectedItem();
 		input_data[4] = text_Profname.getText();
 		input_data[5] = "변경";
 		input_data[6] = "삭제";
+		return true;
 	}
 
 }

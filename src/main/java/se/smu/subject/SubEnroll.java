@@ -25,7 +25,9 @@ public class SubEnroll extends enrollWindow {
 						&& !text_Profname.getText().trim().equals("")) {
 
 					// 등록 전 기본 설정을 확인한다.
-					beforeEnroll(input_data, subtableModel);
+					boolean checkEnroll = beforeEnroll(input_data, subtableModel);
+					if(checkEnroll == false)
+						return;
 
 					// 중복을 검사하고 중복이 아니면 데이터베이스와 테이블에 등록한다.
 					if (!checkDupl(subtableModel, input_data)) {

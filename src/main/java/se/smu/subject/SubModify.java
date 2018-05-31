@@ -46,7 +46,9 @@ public class SubModify extends enrollWindow {
 					System.arraycopy(input_data, 0, prev, 0, input_data.length);
 
 					// 등록 전 기본 설정을 한다.
-					beforeEnroll(input_data, subtableModel);
+					boolean checkEnroll = beforeEnroll(input_data, subtableModel);
+					if(checkEnroll == false)
+						return;
 
 					// 중복여부를 검사 후 중복이 아니면 업데이트
 					if (!checkDupl(subtableModel, input_data)) {

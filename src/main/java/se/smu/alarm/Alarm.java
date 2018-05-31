@@ -12,13 +12,16 @@ import se.smu.db.DBConnection;
 public class Alarm {
 	
 	public Alarm(String id) {
+		// 다음날 날짜로 설정
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, +1);
 		int alarmMonth = cal.get(Calendar.MONTH)+1;
 		int alarmDay = cal.get(Calendar.DAY_OF_MONTH);
 		
+		// Todo 데이터를 마감일 순으로 정렬
 		Vector<Object> deadlines = sortData(id);
 		
+		// 마감일이 내일 일 경우 알람창 생성
 		for(int i=0; i<deadlines.size(); i++) {
 			Vector<Object> vec = (Vector<Object>) deadlines.get(i);
 			String[] time = vec.get(2).toString().split("\\.");
@@ -40,6 +43,7 @@ public class Alarm {
 		
 	}
 	
+	// 중요도를 문자열로 바꾼다.
 	private String getImportance(int val) {
 		switch(val) {
 		case 0:
@@ -51,6 +55,7 @@ public class Alarm {
 		}
 	}
 	
+	// Todo 데이터를 마감일 순서로 정렬한다.
 	@SuppressWarnings("unchecked")
 	public Vector<Object> sortData(String id){
 		

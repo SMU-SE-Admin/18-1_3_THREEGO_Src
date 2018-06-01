@@ -202,18 +202,15 @@ class TodoTableCell extends AbstractCellEditor implements TableCellEditor, Table
 					new TodoModify(id, table, (DefaultTableModel) table.getModel(), rowData, row);
 				}
 				// 삭제 버튼일 경우
-				else if ("삭제".equals(type)) {
-					// 삭제 할지 다시 한 번 확인한다.
-					if (JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
-						DBConnection db = new DBConnection();
-						db.deleteTodo(id, getRows(table, row));
-						db.close();
-						int tmRow = table.convertRowIndexToModel(row);
-						DefaultTableModel tm = (DefaultTableModel) table.getModel();
-						tm.removeRow(tmRow);
-						table.setModel(tm);
-					}
+				else if ("삭제".equals(type) && JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제",
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+					DBConnection db = new DBConnection();
+					db.deleteTodo(id, getRows(table, row));
+					db.close();
+					int tmRow = table.convertRowIndexToModel(row);
+					DefaultTableModel tm = (DefaultTableModel) table.getModel();
+					tm.removeRow(tmRow);
+					table.setModel(tm);
 				}
 				// 메모 버튼일 경우
 				else if ("메모".equals(type)) {

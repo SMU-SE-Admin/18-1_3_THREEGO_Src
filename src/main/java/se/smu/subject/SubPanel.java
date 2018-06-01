@@ -22,7 +22,7 @@ import se.smu.db.DBConnection;
 
 public class SubPanel extends JPanel implements ActionListener {
 	// 과목 패널에서의 기본적인 변수를 선정한다.
-	private String subTitle[] = { "년도-학기", "과목명", "요일", "시간", "교수", "변경", "삭제" };
+	public static String subTitle[] = { "년도-학기", "과목명", "요일", "시간", "교수", "변경", "삭제" };
 	private DefaultTableModel subtableModel;
 	private JTable table;
 	private JLabel lblId;
@@ -47,7 +47,7 @@ public class SubPanel extends JPanel implements ActionListener {
 				}
 			}
 		};
-			
+
 		table = new JTable(subtableModel);
 		table.getTableHeader().setReorderingAllowed(false);
 
@@ -135,19 +135,14 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 					fr.setVisible(true);
 				}
 				// 삭제 버튼일 경우
-				else if ("삭제".equals(type)) {
-					// 해당 과목을 정말 삭제할 것 인지 다시 확인한다.
-					if (JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제", JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
-						// 데이터베이스를 연결하여 해당 데이터를 지우고 테이블에서도 해당 Row를 삭제한다.
-						DBConnection db = new DBConnection();
-						db.deleteSubject(id, getRows(table, row));
-						db.close();
-						int tmRow = table.convertRowIndexToModel(row);
-						DefaultTableModel tm = (DefaultTableModel) table.getModel();
-						tm.removeRow(tmRow);
-						table.setModel(tm);
-					}
+				else if ("삭제".equals(type) && JOptionPane.showConfirmDialog(null, "해당 과목을 삭제하시곘습니까?", "삭제",
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+					// 데이터베이스를 연결하여 해당 데이터를 지우고 테이블에서도 해당 Row를 삭제한다.
+					DBConnection db = new DBConnection();
+					db.deleteSubject(id, getRows(table, row));
+					db.close();
+					DefaultTableModel tm = (DefaultTableModel) table.getModel();
+					reloadTable(tm, table);
 				}
 			}
 		});
@@ -167,6 +162,24 @@ class SubTableCell extends AbstractCellEditor implements TableCellEditor, TableC
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		return btn;
+	}
+
+	private void reloadTable(DefaultTableModel dtm, JTable tbl) {
+		Vector<String> cols = new Vector<String>();
+		for (int i = 0; i < SubPanel.subTitle.length; i++) {
+			cols.add(SubPanel.subTitle[i]);
+		}
+
+		DBConnection db = new DBConnection();
+		Vector<Vector<Object>> redata = new Vector<Vector<Object>>();
+		redata = db.getSubject(id);
+		dtm.setDataVector(redata, cols);
+		db.close();
+
+		tbl.getColumnModel().getColumn(5).setCellEditor(new SubTableCell("변경", id, tbl));
+		tbl.getColumnModel().getColumn(5).setCellRenderer(new SubTableCell("변경", id, tbl));
+		tbl.getColumnModel().getColumn(6).setCellEditor(new SubTableCell("삭제", id, tbl));
+		tbl.getColumnModel().getColumn(6).setCellRenderer(new SubTableCell("삭제", id, tbl));
 	}
 
 	// 선택된 열의 모든 데이터를 배열 형태로 반환한다.
